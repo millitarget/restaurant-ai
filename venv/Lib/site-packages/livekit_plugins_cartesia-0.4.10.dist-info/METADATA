@@ -1,0 +1,46 @@
+Metadata-Version: 2.2
+Name: livekit-plugins-cartesia
+Version: 0.4.10
+Summary: LiveKit Agents Plugin for Cartesia
+Home-page: https://github.com/livekit/agents
+License: Apache-2.0
+Project-URL: Documentation, https://docs.livekit.io
+Project-URL: Website, https://livekit.io/
+Project-URL: Source, https://github.com/livekit/agents
+Keywords: webrtc,realtime,audio,video,livekit
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Topic :: Multimedia :: Sound/Audio
+Classifier: Topic :: Multimedia :: Video
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.9.0
+Description-Content-Type: text/markdown
+Requires-Dist: livekit-agents<1.0.0,>=0.12.16
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: project-url
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# LiveKit Plugins Cartesia
+
+Agent Framework plugin for voice synthesis with [Cartesia](https://cartesia.ai/) API.
+
+## Installation
+
+```bash
+pip install livekit-plugins-cartesia
+```
+
+## Pre-requisites
+
+You'll need an API key from Cartesia. It can be set as an environment variable: `CARTESIA_API_KEY`
