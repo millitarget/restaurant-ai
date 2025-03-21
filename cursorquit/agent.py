@@ -2,6 +2,8 @@ import asyncio
 import logging
 import os
 import sys
+import requests
+import json
 from dotenv import load_dotenv
 from livekit.agents import (
     AutoSubscribe,
@@ -16,6 +18,7 @@ from livekit.plugins import deepgram, openai, silero, elevenlabs
 from livekit.plugins.elevenlabs import Voice
 import datetime
 import time
+import re
 
 # Load environment variables from .env.local file
 load_dotenv(dotenv_path=".env.local")
@@ -35,13 +38,68 @@ logger = logging.getLogger("portuguese-restaurant-assistant")
 SANDBOX_ID = "contextual-node-16jzjr"
 
 # Sample menu in European Portuguese with authentic Portuguese dishes
-MENU = """O nosso menu de hoje inclui: 
-1. Bacalhau à Lagareiro com batata a murro
-2. Caldo Verde com chouriço de Trás-os-Montes
-3. Francesinha do Porto com molho especial da casa
-4. Arroz de tamboril com gambas
-5. Leitão à Bairrada com batata frita
-6. Pastéis de nata para sobremesa"""
+MENU = """MENU DO RESTAURANTE PORTUGUÊS:
+
+CARNE:
+1 Frango do Churrasco - 7.90€
+1/2 Frango do Churrasco - 4.50€
+1/2 Frango do Churrasco * - 8.00€
+1 Espetada de Guia (Caleto) - 6.50€
+1 Espetada de Frango c/ Bacon - 6.50€
+1 Dose de Entrecosto - 8.00€
+1/2 Dose de Entrecosto - 4.50€
+1 Salsicha Toscana - 2.00€
+1 Févera de Porco - 6.00€
+1 Costeleta de Vitela - 25€/kg
+1 Costeleta de Porco - 6.00€
+1 Coelho* - 12.50€
+Costelinha - 19€/kg
+Picanha - 36.50€/kg
+1 Bife do Frango - 6.00€
+Bife do Lombo - 40€/kg
+
+* Tempo estimado: 30 a 40 minutos
+
+ACOMPANHAMENTOS:
+1 Dose de Batata Frita - 3.75€
+1 Dose de Batata Frita Barrosa - 2.50€
+1 Dose de Arroz - 3.75€
+1/2 Dose de Arroz - 2.50€
+1 Salada Mista - 4.00€
+1/2 Salada Mista - 2.75€
+1 Salada de Tomate - 4.00€
+1 Salada de Alface - 4.00€
+1 Dose de Feijão Preto - 5.75€
+1/2 Dose de Feijão Preto - 3.95€
+1 Esparregado Grelos/Espinafres - 5.50€
+1 Broa de Milho - 1.90€
+1/2 Broa de Milho - 1.00€
+1 Broa de Avintes - 3.50€
+1/2 Broa de Avintes - 2.00€
+1 Trança (Caceté) - 1.80€
+
+PEIXE:
+Bacalhau assado na brasa* - 19.50€ (1 Pessoa)
+                           32.50€ (2 Pessoas)
+(com batata cozida, ovo cozido, pimento e cebola)
+
+* Tempo estimado: 40 minutos
+
+REFRIGERANTES:
+Refrigerantes 1 Litro - 2.75€
+Refrigerantes 1.5 Litro - 3.00€
+
+VINHOS:
+Vinhos Verdes 0.75cl
+Vinho da Casa Cruzeiro Lima - 4.00€ (Branco e Tinto)
+Vinho Branco Muralhas Monção - 7.00€
+Vinho Branco Casal Garcia - 7.00€
+
+Vinhos Maduros 0.75cl
+Vinho Porta da Ravessa - 4.50€ (Branco e Tinto)
+Vinho Gasificado Castiço - 5.50€
+Vinho Monte Velho Tinto - 7.00€
+Vinho Eugénio de Almeida Tinto - 7.00€"""
 
 # Wine recommendations in European Portuguese
 WINE_RECOMMENDATIONS = """
@@ -86,6 +144,236 @@ Mantém as respostas concisas e naturais, como numa conversa telefónica real em
 
 Se o cliente perguntar sobre o menu, informa os pratos disponíveis com descrições autênticas da gastronomia portuguesa.
 Quando completa o pedido, repete-o para confirmar todos os detalhes, incluindo os itens, hora de levantamento e nome do cliente."""
+
+# Make.com webhook URL for sending transcript
+MAKE_WEBHOOK_URL = os.getenv("MAKE_WEBHOOK_URL", "https://hook.eu2.make.com/your_webhook_id_here")
+
+# Conversation transcript tracker
+class ConversationTracker:
+    def __init__(self):
+        self.transcript = []
+        self.order_details = {
+            "customer_name": None,
+            "pickup_time": None,
+            "items": []
+        }
+    
+    def add_user_message(self, message):
+        self.transcript.append({"role": "user", "content": message, "timestamp": time.time()})
+        logger.info(f"Added user message to transcript: {message}")
+        
+        # Try to extract order details from user messages
+        self._extract_order_details(message, is_user=True)
+    
+    def add_assistant_message(self, message):
+        self.transcript.append({"role": "assistant", "content": message, "timestamp": time.time()})
+        logger.info(f"Added assistant message to transcript: {message}")
+        
+        # Also check assistant messages for order confirmation
+        self._extract_order_details(message, is_user=False)
+    
+    def _extract_order_details(self, message, is_user=True):
+        """Extract order details from conversation messages"""
+        message_lower = message.lower()
+        
+        # Extract customer name
+        if self.order_details["customer_name"] is None:
+            # Common patterns for customer name in Portuguese conversations
+            name_patterns = [
+                r"meu nome é ([A-Za-zÀ-ÖØ-öø-ÿ\s]+)",
+                r"chamo-me ([A-Za-zÀ-ÖØ-öø-ÿ\s]+)",
+                r"nome (?:é|para) ([A-Za-zÀ-ÖØ-öø-ÿ\s]+)",
+                r"(^|\s)([A-Za-zÀ-ÖØ-öø-ÿ]{2,})\s+([A-Za-zÀ-ÖØ-öø-ÿ]{2,})($|\s)"  # Simple first+last name pattern
+            ]
+            
+            for pattern in name_patterns:
+                matches = re.search(pattern, message_lower)
+                if matches:
+                    potential_name = matches.group(1).strip() if len(matches.groups()) == 1 else f"{matches.group(2)} {matches.group(3)}".strip()
+                    # Verify it's not just a common phrase
+                    common_words = ["obrigado", "bom", "boa", "dia", "tarde", "noite", "gostaria", "desejo", "quero"]
+                    if len(potential_name.split()) >= 2 and not any(word in potential_name.lower() for word in common_words):
+                        self.order_details["customer_name"] = potential_name
+                        logger.info(f"Extracted customer name: {potential_name}")
+        
+        # Extract pickup time
+        if self.order_details["pickup_time"] is None:
+            # Patterns for pickup time in Portuguese contexts
+            time_patterns = [
+                r"(?:às|as|para) (\d{1,2})[h:. ]?(\d{0,2})",  # 15h30, 15:30, 15h, etc.
+                r"(\d{1,2})[h:. ]?(\d{0,2}) (?:horas|hora)",   # 15h30 horas, 15 horas, etc.
+                r"levantar (?:às|as|para) (\d{1,2})[h:. ]?(\d{0,2})",  # pickup specific
+                r"buscar (?:às|as|para) (\d{1,2})[h:. ]?(\d{0,2})"     # pickup specific
+            ]
+            
+            for pattern in time_patterns:
+                matches = re.search(pattern, message_lower)
+                if matches:
+                    hour = int(matches.group(1))
+                    minute = int(matches.group(2)) if matches.group(2) else 0
+                    if 0 <= hour <= 23 and 0 <= minute <= 59:
+                        time_str = f"{hour:02d}:{minute:02d}"
+                        self.order_details["pickup_time"] = time_str
+                        logger.info(f"Extracted pickup time: {time_str}")
+        
+        # Extract menu items - Updated with the new comprehensive menu
+        menu_items = {
+            # Carne (Meat)
+            "frango do churrasco": "Frango do Churrasco",
+            "1/2 frango": "1/2 Frango do Churrasco",
+            "espetada de guia": "Espetada de Guia (Caleto)",
+            "espetada de frango": "Espetada de Frango c/ Bacon",
+            "entrecosto": "Dose de Entrecosto",
+            "salsicha toscana": "Salsicha Toscana",
+            "févera de porco": "Févera de Porco",
+            "costeleta de vitela": "Costeleta de Vitela",
+            "costeleta de porco": "Costeleta de Porco",
+            "coelho": "Coelho",
+            "costelinha": "Costelinha",
+            "picanha": "Picanha",
+            "bife do frango": "Bife do Frango",
+            "bife do lombo": "Bife do Lombo",
+            
+            # Acompanhamentos (Side dishes)
+            "batata frita": "Dose de Batata Frita",
+            "batata frita barrosa": "Dose de Batata Frita Barrosa",
+            "arroz": "Dose de Arroz",
+            "salada mista": "Salada Mista",
+            "salada de tomate": "Salada de Tomate",
+            "salada de alface": "Salada de Alface",
+            "feijão preto": "Dose de Feijão Preto",
+            "esparregado": "Esparregado Grelos/Espinafres",
+            "broa de milho": "Broa de Milho",
+            "broa de avintes": "Broa de Avintes",
+            "trança": "Trança (Caceté)",
+            "cacete": "Trança (Caceté)",
+            
+            # Peixe (Fish)
+            "bacalhau": "Bacalhau assado na brasa",
+            "bacalhau assado": "Bacalhau assado na brasa",
+            
+            # Bebidas (Drinks)
+            "refrigerante": "Refrigerantes 1 Litro",
+            "vinho verde": "Vinho da Casa Cruzeiro Lima",
+            "muralhas monção": "Vinho Branco Muralhas Monção",
+            "casal garcia": "Vinho Branco Casal Garcia",
+            "porta da ravessa": "Vinho Porta da Ravessa",
+            "castiço": "Vinho Gasificado Castiço",
+            "monte velho": "Vinho Monte Velho Tinto",
+            "eugénio de almeida": "Vinho Eugénio de Almeida Tinto"
+        }
+        
+        # Look for menu items with quantity patterns
+        quantity_patterns = [
+            r"(\d+)\s+(?:de\s+)?([A-Za-zÀ-ÖØ-öø-ÿ\s]+)",  # 2 Francesinhas
+            r"([A-Za-zÀ-ÖØ-öø-ÿ\s]+)\s+(?:-\s+)?(\d+)"    # Francesinhas - 2
+        ]
+        
+        if is_user:  # Only extract items from user messages
+            # Check for direct mentions of menu items
+            for item_key, item_name in menu_items.items():
+                if item_key in message_lower:
+                    # Try to find quantity
+                    quantity = 1
+                    for pattern in quantity_patterns:
+                        matches = re.search(pattern, message_lower)
+                        if matches and (item_key in matches.group(1).lower() or item_key in matches.group(2).lower()):
+                            try:
+                                quantity = int(matches.group(1) if item_key in matches.group(2).lower() else matches.group(2))
+                                break
+                            except (ValueError, IndexError):
+                                pass
+                    
+                    # Add to order items if not already there
+                    item_entry = {"item": item_name, "quantity": quantity}
+                    if not any(existing["item"] == item_name for existing in self.order_details["items"]):
+                        self.order_details["items"].append(item_entry)
+                        logger.info(f"Added item to order: {quantity}x {item_name}")
+                    else:
+                        # Update quantity if item exists
+                        for existing in self.order_details["items"]:
+                            if existing["item"] == item_name:
+                                existing["quantity"] = quantity
+                                logger.info(f"Updated item quantity: {quantity}x {item_name}")
+        
+        # Also check for mentions of portions (meia dose, uma dose)
+        portion_patterns = [
+            r"(?:uma|1)\s+dose\s+de\s+([A-Za-zÀ-ÖØ-öø-ÿ\s]+)",  # uma dose de arroz
+            r"(?:meia|1/2)\s+dose\s+de\s+([A-Za-zÀ-ÖØ-öø-ÿ\s]+)"  # meia dose de arroz
+        ]
+        
+        for i, pattern in enumerate(portion_patterns):
+            matches = re.finditer(pattern, message_lower)
+            for match in matches:
+                item_base = match.group(1).strip()
+                portion_type = "1/2" if i == 1 else "1"
+                
+                # Find the corresponding menu item
+                for item_key, item_name in menu_items.items():
+                    if item_base in item_key:
+                        if "1/2" in item_name and portion_type == "1/2":
+                            # It's already a half portion in the menu
+                            full_item = item_name
+                        elif portion_type == "1/2" and "1/2" not in item_name:
+                            # Need to convert to half portion
+                            full_item = f"1/2 {item_name}"
+                        else:
+                            full_item = item_name
+                            
+                        # Add to order items
+                        item_entry = {"item": full_item, "quantity": 1}
+                        if not any(existing["item"] == full_item for existing in self.order_details["items"]):
+                            self.order_details["items"].append(item_entry)
+                            logger.info(f"Added portion item to order: {full_item}")
+                        break
+    
+    def get_transcript(self):
+        return self.transcript
+    
+    def get_order_summary(self):
+        """Get a formatted summary of the order"""
+        if not self.order_details["items"]:
+            return "Nenhum item foi pedido ainda."
+        
+        summary = "Resumo do pedido:\n"
+        
+        for item in self.order_details["items"]:
+            summary += f"- {item['quantity']}x {item['item']}\n"
+        
+        if self.order_details["pickup_time"]:
+            summary += f"\nHorário de levantamento: {self.order_details['pickup_time']}"
+        
+        if self.order_details["customer_name"]:
+            summary += f"\nNome: {self.order_details['customer_name']}"
+            
+        return summary
+    
+    def send_to_webhook(self):
+        """Send the complete transcript to the Make.com webhook"""
+        try:
+            if not MAKE_WEBHOOK_URL or MAKE_WEBHOOK_URL == "https://hook.eu2.make.com/your_webhook_id_here":
+                logger.warning("Make.com webhook URL not configured. Transcript not sent.")
+                return False
+                
+            payload = {
+                "transcript": self.transcript,
+                "order_details": self.order_details,
+                "order_summary": self.get_order_summary()
+            }
+            
+            logger.info(f"Sending transcript to Make.com webhook: {MAKE_WEBHOOK_URL}")
+            response = requests.post(MAKE_WEBHOOK_URL, json=payload)
+            
+            if response.status_code == 200:
+                logger.info("Transcript successfully sent to Make.com")
+                return True
+            else:
+                logger.error(f"Failed to send transcript. Status code: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error sending transcript to Make.com: {e}")
+            return False
 
 def prewarm(proc):
     """Preload models for faster startup"""
@@ -351,6 +639,11 @@ async def entrypoint(ctx: JobContext):
     global interaction_tracker
     interaction_tracker = UserInteractionTracker()
     logger.info("Initialized interaction tracker for adaptive content")
+    
+    # Initialize the conversation tracker
+    global conversation_tracker
+    conversation_tracker = ConversationTracker()
+    logger.info("Initialized conversation transcript tracker")
 
     # Connect to the room
     logger.info("Connecting to LiveKit room...")
@@ -377,9 +670,9 @@ async def entrypoint(ctx: JobContext):
             logger.info("Using ElevenLabs TTS with voice 'Ana'")
             tts = elevenlabs.TTS(
                 voice=Voice(
-                    id="TsZfI8Nbn2Xd7ArC76n9", 
-                    name="Ana", 
-                    category="premade"
+                    id="FIEA0c5UHH9JnvWaQrXS", 
+                    name="Michele - Brazilian", 
+                    category="premade",
                 ),
                 api_key=elevenlabs_key
             )
@@ -435,6 +728,10 @@ async def entrypoint(ctx: JobContext):
                 content = msg.content.lower() if msg.content else ""
                 logger.info(f"User speech committed: {content}")
                 
+                # Add to transcript tracker
+                if content:
+                    conversation_tracker.add_user_message(content)
+                
                 # Check for regional cuisine inquiries
                 regions = ["norte", "porto", "douro", "centro", "bairrada", "lisboa", "alentejo", "algarve"]
                 for region in regions:
@@ -470,7 +767,12 @@ async def entrypoint(ctx: JobContext):
         @assistant.on("agent_speech_committed")
         def on_agent_speech_committed(msg):
             if hasattr(msg, 'content'):
-                logger.info(f"Agent speech committed: {msg.content}")
+                content = msg.content
+                logger.info(f"Agent speech committed: {content}")
+                
+                # Add to transcript tracker
+                if content:
+                    conversation_tracker.add_assistant_message(content)
 
         # DTMF handler with European Portuguese responses
         @assistant.on("dtmf_received")
@@ -507,6 +809,36 @@ async def entrypoint(ctx: JobContext):
                         "Prima 1 para Norte, 2 para Centro, 3 para Lisboa, 4 para Alentejo, ou 5 para Algarve."
                     )
                 )
+            elif digits == "7":
+                # Get order summary
+                order_summary = conversation_tracker.get_order_summary()
+                asyncio.create_task(adaptive_say(
+                    assistant,
+                    f"Aqui está o resumo do seu pedido atual: {order_summary}",
+                    context="order_summary"
+                ))
+            elif digits == "8":
+                # Send transcript manually
+                transcript_sent = conversation_tracker.send_to_webhook()
+                if transcript_sent:
+                    asyncio.create_task(adaptive_say(
+                        assistant,
+                        "O seu pedido foi enviado para processamento. Obrigado!",
+                        context="confirmation"
+                    ))
+                else:
+                    asyncio.create_task(adaptive_say(
+                        assistant,
+                        "Desculpe, ocorreu um erro ao enviar o seu pedido. Por favor, tente novamente mais tarde.",
+                        context="error"
+                    ))
+            elif digits == "9":
+                # Repeat last message
+                if conversation_tracker.transcript and any(msg["role"] == "assistant" for msg in conversation_tracker.transcript):
+                    last_message = next((msg["content"] for msg in reversed(conversation_tracker.transcript) 
+                                       if msg["role"] == "assistant"), None)
+                    if last_message:
+                        asyncio.create_task(adaptive_say(assistant, f"Vou repetir: {last_message}"))
             elif digits == "61":
                 # North region specialties
                 asyncio.create_task(adaptive_say(assistant, get_regional_specialties("norte")))
@@ -539,15 +871,23 @@ async def entrypoint(ctx: JobContext):
             metrics.log_metrics(mtrcs)
             usage_collector.collect(mtrcs)
 
-        # Log usage on shutdown
+        # Log usage on shutdown and send transcript
         async def log_usage():
             try:
+                # Log usage summary
                 summary = usage_collector.get_summary()
                 logger.info(f"Usage summary: {summary}")
+                
                 # Log final adaptive content stats
                 logger.info(f"Final verbosity level: {interaction_tracker.verbosity_level}")
+                
+                # Send conversation transcript to Make.com
+                logger.info("Sending conversation transcript to Make.com webhook")
+                transcript_sent = conversation_tracker.send_to_webhook()
+                logger.info(f"Transcript sent: {transcript_sent}")
+                
             except Exception as e:
-                logger.error(f"Failed to get usage summary: {e}")
+                logger.error(f"Failed to get usage summary or send transcript: {e}")
 
         ctx.add_shutdown_callback(log_usage)
 
@@ -555,6 +895,25 @@ async def entrypoint(ctx: JobContext):
         @ctx.room.on("disconnected")
         def on_room_disconnected():
             logger.info("Room disconnected")
+            
+            # Send the transcript when the room disconnects
+            try:
+                logger.info("Room disconnected, sending conversation transcript to Make.com")
+                # Run in a task to avoid blocking
+                asyncio.create_task(send_transcript_on_disconnect())
+            except Exception as e:
+                logger.error(f"Error sending transcript on disconnect: {e}")
+
+        # Function to send transcript on disconnect
+        async def send_transcript_on_disconnect():
+            try:
+                # Short delay to ensure all messages are processed
+                await asyncio.sleep(1)
+                # Send the transcript
+                transcript_sent = conversation_tracker.send_to_webhook()
+                logger.info(f"Transcript sent on disconnect: {transcript_sent}")
+            except Exception as e:
+                logger.error(f"Failed to send transcript on disconnect: {e}")
 
         # Start the assistant
         logger.info("Starting voice assistant...")
