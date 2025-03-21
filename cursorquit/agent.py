@@ -19,6 +19,7 @@ from livekit.plugins.elevenlabs import Voice
 import datetime
 import time
 import re
+import random
 
 # Load environment variables from .env.local file
 load_dotenv(dotenv_path=".env.local")
@@ -131,19 +132,9 @@ Sobremesas Tradicionais:
 """
 
 # System prompt for the assistant - Updated for European Portuguese takeout orders
-SYSTEM_PROMPT = """És um assistente de voz para um restaurante português em Lisboa que atende encomendas para takeaway (levar para fora). Responde em português europeu de forma amigável e natural.
-Usa expressões tipicamente portuguesas como "pois", "então", "ora bem", "é pá", "com certeza", e "pronto".
-
-Segue SEMPRE estas etapas nesta ordem exata:
-1. Primeiro, pergunta o que o cliente deseja encomendar do menu. Deixa o cliente dizer todos os itens que quer encomendar.
-2. Depois que o cliente terminar de escolher, pergunta a hora de levantamento desejada para o pedido.
-3. Finalmente, pergunta o nome do cliente para associar à encomenda.
-
-Refere-te ao cliente como "o senhor" ou "a senhora" para ser formal.
-Mantém as respostas concisas e naturais, como numa conversa telefónica real em Portugal.
-
-Se o cliente perguntar sobre o menu, informa os pratos disponíveis com descrições autênticas da gastronomia portuguesa.
-Quando completa o pedido, repete-o para confirmar todos os detalhes, incluindo os itens, hora de levantamento e nome do cliente."""
+SYSTEM_PROMPT = """És um assistente de restaurante português que atende encomendas takeaway. 
+Responde em português europeu, conciso e natural. Recolhe: 1) items do menu, 2) hora de levantamento, 
+3) nome do cliente. Sê formal ("o senhor"/"a senhora"). Respostas breves como numa chamada telefónica real."""
 
 # Make.com webhook URL for sending transcript
 MAKE_WEBHOOK_URL = os.getenv("MAKE_WEBHOOK_URL", "https://hook.eu2.make.com/your_webhook_id_here")
@@ -409,101 +400,47 @@ def get_regional_specialties(region):
     }
     return regions.get(region.lower(), "Temos pratos de várias regiões de Portugal no nosso menu. Posso recomendar algo específico?")
 
-# User Interaction Tracker for Adaptive Pacing
+# Simplified interaction tracking - removing unnecessary verbosity analysis
 class UserInteractionTracker:
     def __init__(self):
-        # Initial adaptation level - normal verbosity
-        self.verbosity_level = "normal"  # Options: "concise", "normal", "detailed"
-        
-        # Tracking variables
-        self.speech_durations = []
-        self.response_times = []
-        self.interruption_count = 0
+        # Remove verbosity tracking to speed up responses
         self.last_user_speech_end = None
         self.last_agent_speech_end = None
         
-        # Analysis thresholds
-        self.short_speech_threshold = 2.0   # seconds
-        self.long_speech_threshold = 8.0   # seconds
+        # Tracking for empty speech detection only
+        self.empty_speech_count = 0
         
-        # Window size for pattern analysis
-        self.window_size = 3
-        
-        logger.info(f"Initialized adaptive content with verbosity level: {self.verbosity_level}")
+        logger.info("Initialized simplified interaction tracker")
     
     def record_user_speech_start(self):
         # Record when user starts speaking
         self.user_speech_start_time = time.time()
-        
-        # If user starts speaking soon after agent finished, it might be an interruption
-        if self.last_agent_speech_end and (time.time() - self.last_agent_speech_end < 0.5):
-            self.interruption_count += 1
-            logger.info(f"Possible interruption detected. Count: {self.interruption_count}")
     
     def record_user_speech_end(self):
-        # Only calculate if we have a start time
+        # Only update timing for speech detection
         if hasattr(self, 'user_speech_start_time'):
-            duration = time.time() - self.user_speech_start_time
-            self.speech_durations.append(duration)
-            
-            # Keep only the last window_size entries
-            if len(self.speech_durations) > self.window_size:
-                self.speech_durations.pop(0)
-                
             self.last_user_speech_end = time.time()
-            
-            # Log the duration for analysis
-            logger.info(f"User speech duration: {duration:.2f}s")
     
     def record_agent_speech_end(self):
         self.last_agent_speech_end = time.time()
-        
-        # Calculate response time if user spoke before
-        if self.last_user_speech_end:
-            response_time = self.last_agent_speech_end - self.last_user_speech_end
-            self.response_times.append(response_time)
-            
-            # Keep only the last window_size entries
-            if len(self.response_times) > self.window_size:
-                self.response_times.pop(0)
     
-    def analyze_patterns_and_adjust_verbosity(self):
-        # Only adjust if we have enough data
-        if len(self.speech_durations) < 2:
-            return self.verbosity_level
+    def check_for_empty_speech(self, content):
+        """Check if the speech content is meaningful or just background noise"""
+        # Strip whitespace and punctuation
+        cleaned_content = content.strip()
+        if not cleaned_content or len(cleaned_content) < 2:
+            self.empty_speech_count += 1
+            return True
         
-        # Calculate average speech duration in window
-        avg_duration = sum(self.speech_durations) / len(self.speech_durations)
-        
-        # Analyze speech patterns and adjust verbosity
-        new_verbosity = self.verbosity_level
-        
-        # 1. If user consistently speaks quickly/briefly, make responses more concise
-        if avg_duration < self.short_speech_threshold:
-            new_verbosity = "concise"
-            logger.info(f"User speaks briefly ({avg_duration:.2f}s). Using concise responses.")
+        # Check for common background noise transcriptions
+        noise_patterns = ['.', '...', 'hmm', 'ah', 'uh', 'um', 'eh', 'oh']
+        if cleaned_content.lower() in noise_patterns:
+            self.empty_speech_count += 1
+            return True
             
-        # 2. If user consistently speaks at length, provide more detailed responses
-        elif avg_duration > self.long_speech_threshold:
-            new_verbosity = "detailed"
-            logger.info(f"User speaks at length ({avg_duration:.2f}s). Using detailed responses.")
-        
-        # 3. If user frequently interrupts, use more concise responses
-        elif self.interruption_count >= 2:
-            new_verbosity = "concise"
-            self.interruption_count = 0  # Reset counter after adjustment
-            logger.info("Multiple interruptions detected. Using concise responses.")
-        
-        # Otherwise, use normal verbosity
-        else:
-            new_verbosity = "normal"
-        
-        # Only log if verbosity actually changed
-        if new_verbosity != self.verbosity_level:
-            logger.info(f"Adapting response style from {self.verbosity_level} to {new_verbosity}")
-            self.verbosity_level = new_verbosity
-            
-        return self.verbosity_level
+        # This is legitimate speech
+        self.empty_speech_count = 0
+        return False
 
 # Helper functions for content adaptation
 def make_response_concise(text):
@@ -586,30 +523,82 @@ def elaborate_response(text, context=None):
         
     return result
 
-# Custom say function with adaptive content
+# Common pre-generated responses for faster interaction
+COMMON_RESPONSES = {
+    "greeting": {
+        "morning": "Bom dia! Restaurante Português, em que posso ajudar?",
+        "afternoon": "Boa tarde! Restaurante Português, em que posso ajudar?",
+        "evening": "Boa noite! Restaurante Português, em que posso ajudar?"
+    },
+    "menu_request": f"Aqui está o nosso menu principal. O que gostaria de encomendar?",
+    "confirmation": "Perfeito! Vou registar o seu pedido.",
+    "thanks": "Muito obrigado pela sua encomenda.",
+    "wait": ["Um momento...", "Já verifico...", "Vou ver isso...", "Um instante por favor..."],
+    "acknowledgment": ["Entendido.", "Compreendo.", "Certo.", "Claro.", "Sim."]
+}
+
+# Custom say function - simplified for faster performance 
 async def adaptive_say(assistant, text, allow_interruptions=True, context=None):
-    # Get the current verbosity level based on user interaction patterns
-    verbosity_level = interaction_tracker.analyze_patterns_and_adjust_verbosity()
+    # Use pre-generated responses when possible for immediate response
+    if context in COMMON_RESPONSES and isinstance(COMMON_RESPONSES[context], str):
+        logger.info(f"Using pre-generated response for context: {context}")
+        await assistant.say(COMMON_RESPONSES[context], allow_interruptions=allow_interruptions)
+        return
+    elif context == "greeting":
+        # Determine time of day for appropriate greeting
+        current_hour = datetime.datetime.now().hour
+        if current_hour < 12:
+            greeting_type = "morning"
+        elif current_hour < 19:
+            greeting_type = "afternoon"
+        else:
+            greeting_type = "evening"
+        await assistant.say(COMMON_RESPONSES["greeting"][greeting_type], allow_interruptions=allow_interruptions)
+        return
     
-    # Adapt content based on verbosity level
-    if verbosity_level == "concise":
-        adapted_text = make_response_concise(text)
-        logger.info(f"Using concise response style. Original length: {len(text)}, adapted length: {len(adapted_text)}")
-    elif verbosity_level == "detailed":
-        adapted_text = elaborate_response(text, context)
-        logger.info(f"Using detailed response style. Original length: {len(text)}, adapted length: {len(adapted_text)}")
-    else:
-        adapted_text = text
-        logger.info(f"Using normal response style. Length: {len(text)}")
+    # For critical/menu responses only, handle in chunks to appear faster
+    if context in ["menu_request", "order_summary"] and len(text) > 80:
+        # Split on periods and send chunks
+        sentences = text.split('.')
+        chunks = []
+        current = ""
+        
+        # Create chunks of reasonable size
+        for sentence in sentences:
+            if sentence.strip():
+                if len(current) + len(sentence) < 80:
+                    current += sentence + "."
+                else:
+                    if current:
+                        chunks.append(current)
+                    current = sentence + "."
+        
+        if current:
+            chunks.append(current)
+            
+        # Send chunks sequentially
+        for chunk in chunks:
+            await assistant.say(chunk, allow_interruptions=True)
+        return
     
-    # Call the original say method with adapted content
-    await assistant.say(adapted_text, allow_interruptions=allow_interruptions)
+    # For all other responses, send directly without content adaptation
+    await assistant.say(text, allow_interruptions=allow_interruptions)
 
 async def entrypoint(ctx: JobContext):
     """Main entrypoint for the agent"""
     logger.info(f"Starting Portuguese restaurant voice assistant for room {ctx.room.name}")
 
-    # Create chat context with system prompt
+    # Initialize the simplified interaction tracker
+    global interaction_tracker
+    interaction_tracker = UserInteractionTracker()
+    logger.info("Initialized simplified interaction tracker")
+    
+    # Global tracker for metrics, transcript and order details
+    global conversation_tracker
+    conversation_tracker = ConversationTracker()
+    logger.info("Initialized conversation tracker for order details and transcript")
+
+    # Create the chat context with system prompt
     logger.info("Setting up assistant system prompt")
     initial_ctx = llm.ChatContext().append(
         role="system",
@@ -635,16 +624,6 @@ async def entrypoint(ctx: JobContext):
         """
     )
 
-    # Initialize the adaptive pacing tracker
-    global interaction_tracker
-    interaction_tracker = UserInteractionTracker()
-    logger.info("Initialized interaction tracker for adaptive content")
-    
-    # Initialize the conversation tracker
-    global conversation_tracker
-    conversation_tracker = ConversationTracker()
-    logger.info("Initialized conversation transcript tracker")
-
     # Connect to the room
     logger.info("Connecting to LiveKit room...")
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
@@ -656,7 +635,7 @@ async def entrypoint(ctx: JobContext):
 
     # Check if we have the required API keys
     deepgram_key = os.environ.get("DEEPGRAM_API_KEY", "")
-    elevenlabs_key = os.environ.get("ELEVENLABS_API_KEY") or os.environ.get("ELEVEN_API_KEY", "")
+    elevenlabs_key = os.getenv("ELEVENLABS_API_KEY", "")
 
     if not deepgram_key or deepgram_key.startswith(("YOUR_", "REPLACE_")):
         logger.warning("Deepgram API key is missing or invalid")
@@ -666,16 +645,40 @@ async def entrypoint(ctx: JobContext):
         logger.info("Initializing voice assistant...")
 
         # Configure TTS with ElevenLabs
-        if elevenlabs_key and not elevenlabs_key.startswith(("YOUR_", "REPLACE_")):
-            logger.info("Using ElevenLabs TTS with voice 'Ana'")
+        if elevenlabs_key:
+            from elevenlabs import VoiceSettings, generate, stream
+            
+            # Optimize streaming configuration
+            def stream_audio_optimized(text, voice="Ana", model="eleven_multilingual_v2"):
+                """Stream audio with optimized settings for faster processing"""
+                audio_stream = generate(
+                    text=text,
+                    voice=voice,
+                    model=model,
+                    stream=True,
+                    latency=1,  # Lower latency for faster response
+                    stability=0.4,  # Slightly less stability for faster processing
+                    similarity_boost=0.65,  # Balance voice quality and speed
+                )
+                return audio_stream
+            
+            # Configure TTS with faster settings - reduced stability for speed
             tts = elevenlabs.TTS(
                 voice=Voice(
                     id="FIEA0c5UHH9JnvWaQrXS", 
-                    name="Michele - Brazilian", 
+                    name="Ana", 
                     category="premade",
                 ),
-                api_key=elevenlabs_key
+                api_key=elevenlabs_key,
+                # Add optimization parameters for faster processing
+                settings=VoiceSettings(
+                    stability=0.3,  # Further reduced for faster processing
+                    similarity_boost=0.6,  # Further reduced for faster processing
+                    style=0.0,      # Neutral style for faster processing
+                    use_speaker_boost=True  # Clearer audio
+                )
             )
+            voice_message = f"Using ElevenLabs TTS with voice: Ana (optimized for speed)"
         else:
             logger.info("Using OpenAI TTS (fallback)")
             tts = openai.TTS()
@@ -684,6 +687,14 @@ async def entrypoint(ctx: JobContext):
         stt = deepgram.STT(
             language="pt-PT",  # Specifically set to European Portuguese
             model="nova-2",
+            smart_format=True,  # Better formatting of numbers and currency
+            punctuate=True,     # Add proper punctuation
+            profanity_filter=False,  # Allow natural speech
+            keywords=[         # Restaurant-specific terms for better recognition
+                "bacalhau", "francesinha", "frango", "polvo", "grelhado",
+                "assado", "sobremesa", "vinho", "tinto", "branco",
+                "menu", "pedido", "encomenda", "prato", "dose", "meia"
+            ]
         )
 
         # Use the preloaded VAD model if available
@@ -711,7 +722,7 @@ async def entrypoint(ctx: JobContext):
                     )
                 )
 
-        # User speech events with adaptive tracking
+        # User speech events with simplified tracking
         @assistant.on("user_speech_started")
         def on_user_speech_started():
             logger.info("User started speaking")
@@ -721,147 +732,83 @@ async def entrypoint(ctx: JobContext):
         def on_user_speech_ended():
             logger.info("User stopped speaking")
             interaction_tracker.record_user_speech_end()
-            
+        
         @assistant.on("user_speech_committed")
         def on_user_speech_committed(msg):
             if hasattr(msg, 'content'):
                 content = msg.content.lower() if msg.content else ""
                 logger.info(f"User speech committed: {content}")
                 
+                # Ignore empty content completely
+                if not content:
+                    logger.info("Ignoring empty speech")
+                    return
+                
+                # Check if this is just noise or empty speech
+                if interaction_tracker.check_for_empty_speech(content):
+                    logger.info("Ignoring noise-only speech")
+                    return
+                  
                 # Add to transcript tracker
-                if content:
-                    conversation_tracker.add_user_message(content)
+                conversation_tracker.add_user_message(content)
                 
-                # Check for regional cuisine inquiries
-                regions = ["norte", "porto", "douro", "centro", "bairrada", "lisboa", "alentejo", "algarve"]
-                for region in regions:
-                    if region in content and ("especialidade" in content or "prato" in content or "típico" in content or "região" in content):
-                        asyncio.create_task(adaptive_say(assistant, get_regional_specialties(region)))
-                        return
-                
-                # Check for wine inquiries
-                if "vinho" in content:
-                    if "tinto" in content:
-                        asyncio.create_task(adaptive_say(assistant, "Nos vinhos tintos, recomendo especialmente o nosso Quinta do Crasto Reserva do Douro."))
-                    elif "branco" in content:
-                        asyncio.create_task(adaptive_say(assistant, "Nos vinhos brancos, o Soalheiro Alvarinho de Vinho Verde é excelente para acompanhar pratos de peixe."))
-                    elif "porto" in content or "do porto" in content:
-                        asyncio.create_task(adaptive_say(assistant, "Temos uma excelente seleção de Vinhos do Porto. Recomendo o Taylor's 20 Anos para finalizar a sua refeição."))
-                    else:
-                        asyncio.create_task(adaptive_say(assistant, "Temos uma excelente carta de vinhos portugueses. Gostaria de conhecer os nossos tintos, brancos ou Vinhos do Porto?"))
-                
-                # Check for dessert inquiries
-                if "sobremesa" in content or "doce" in content:
-                    asyncio.create_task(adaptive_say(assistant, f"As nossas sobremesas são tradicionais portuguesas: {DESSERT_MENU}"))
+                # Queue processing as separate task
+                process_response(msg, content, assistant)
 
-        # Agent speech events with adaptive tracking
-        @assistant.on("agent_speech_started")
-        def on_agent_speech_started():
-            logger.info("Agent started speaking")
+        # Process user input in a non-blocking way - simplified
+        def process_response(msg, content, assistant):
+            # Skip the acknowledgment system completely for faster responses
+            # Start processing the full response immediately
+            asyncio.create_task(process_user_speech(msg, content, assistant))
 
-        @assistant.on("agent_speech_ended")
-        def on_agent_speech_ended():
-            logger.info("Agent stopped speaking")
-            interaction_tracker.record_agent_speech_end()
+        # Process user speech with full response logic - simplified
+        async def process_user_speech(msg, content, assistant, acknowledgment_task=None):
+            # Extract order details if present
+            conversation_tracker._extract_order_details(content)
             
-        @assistant.on("agent_speech_committed")
-        def on_agent_speech_committed(msg):
-            if hasattr(msg, 'content'):
-                content = msg.content
-                logger.info(f"Agent speech committed: {content}")
-                
-                # Add to transcript tracker
-                if content:
-                    conversation_tracker.add_assistant_message(content)
-
-        # DTMF handler with European Portuguese responses
-        @assistant.on("dtmf_received")
-        def on_dtmf_received(digits):
-            logger.info(f"DTMF digits received: {digits}")
-            if digits == "1":
-                asyncio.create_task(
-                    adaptive_say(
-                        assistant,
-                        "Selecionou a opção de reserva. Por favor, indique a data, hora e número de pessoas para a sua reserva."
-                    )
-                )
-            elif digits == "2":
-                asyncio.create_task(adaptive_say(assistant, f"Aqui está o nosso menu de hoje: {MENU}"))
-            elif digits == "3":
-                asyncio.create_task(
-                    adaptive_say(
-                        assistant,
-                        "Vou transferir a sua chamada para um dos nossos colaboradores. Um momento, por favor."
-                    )
-                )
-            elif digits == "4":
-                # Wine recommendations
-                asyncio.create_task(adaptive_say(assistant, f"As nossas recomendações de vinhos: {WINE_RECOMMENDATIONS}"))
-            elif digits == "5":
-                # Dessert menu
-                asyncio.create_task(adaptive_say(assistant, f"A nossa carta de sobremesas: {DESSERT_MENU}"))
-            elif digits == "6":
-                # Regional recommendations
-                asyncio.create_task(
-                    adaptive_say(
-                        assistant,
-                        "Para qual região de Portugal gostaria de conhecer as nossas especialidades? "
-                        "Prima 1 para Norte, 2 para Centro, 3 para Lisboa, 4 para Alentejo, ou 5 para Algarve."
-                    )
-                )
-            elif digits == "7":
-                # Get order summary
-                order_summary = conversation_tracker.get_order_summary()
-                asyncio.create_task(adaptive_say(
-                    assistant,
-                    f"Aqui está o resumo do seu pedido atual: {order_summary}",
-                    context="order_summary"
-                ))
-            elif digits == "8":
-                # Send transcript manually
-                transcript_sent = conversation_tracker.send_to_webhook()
-                if transcript_sent:
-                    asyncio.create_task(adaptive_say(
-                        assistant,
-                        "O seu pedido foi enviado para processamento. Obrigado!",
-                        context="confirmation"
-                    ))
+            # Check for regional cuisine inquiries
+            regions = ["norte", "porto", "douro", "centro", "bairrada", "lisboa", "alentejo", "algarve"]
+            for region in regions:
+                if region in content and ("especialidade" in content or "prato" in content or "típico" in content or "região" in content):
+                    await adaptive_say(assistant, get_regional_specialties(region))
+                    return
+            
+            # Check for wine inquiries
+            if "vinho" in content:
+                # Execute the appropriate response based on the content
+                if "tinto" in content:
+                    await adaptive_say(assistant, "Nos vinhos tintos, recomendo especialmente o nosso Quinta do Crasto Reserva do Douro.")
+                elif "branco" in content:
+                    await adaptive_say(assistant, "Nos vinhos brancos, o Soalheiro Alvarinho de Vinho Verde é excelente para acompanhar pratos de peixe.")
+                elif "porto" in content or "do porto" in content:
+                    await adaptive_say(assistant, "Temos uma excelente seleção de Vinhos do Porto. Recomendo o Taylor's 20 Anos para finalizar a sua refeição.")
                 else:
-                    asyncio.create_task(adaptive_say(
-                        assistant,
-                        "Desculpe, ocorreu um erro ao enviar o seu pedido. Por favor, tente novamente mais tarde.",
-                        context="error"
-                    ))
-            elif digits == "9":
-                # Repeat last message
-                if conversation_tracker.transcript and any(msg["role"] == "assistant" for msg in conversation_tracker.transcript):
-                    last_message = next((msg["content"] for msg in reversed(conversation_tracker.transcript) 
-                                       if msg["role"] == "assistant"), None)
-                    if last_message:
-                        asyncio.create_task(adaptive_say(assistant, f"Vou repetir: {last_message}"))
-            elif digits == "61":
-                # North region specialties
-                asyncio.create_task(adaptive_say(assistant, get_regional_specialties("norte")))
-            elif digits == "62":
-                # Central region specialties
-                asyncio.create_task(adaptive_say(assistant, get_regional_specialties("centro")))
-            elif digits == "63":
-                # Lisbon region specialties
-                asyncio.create_task(adaptive_say(assistant, get_regional_specialties("lisboa")))
-            elif digits == "64":
-                # Alentejo region specialties
-                asyncio.create_task(adaptive_say(assistant, get_regional_specialties("alentejo")))
-            elif digits == "65":
-                # Algarve region specialties
-                asyncio.create_task(adaptive_say(assistant, get_regional_specialties("algarve")))
-            elif digits == "0":
-                asyncio.create_task(
-                    adaptive_say(
-                        assistant,
-                        "Muito obrigado pela sua chamada para o Restaurante Português. Até à próxima!",
-                        context="closing"
-                    )
-                )
+                    await adaptive_say(assistant, "Temos uma excelente carta de vinhos portugueses. Gostaria de conhecer os nossos tintos, brancos ou Vinhos do Porto?")
+                return
+            
+            # Check for dessert inquiries
+            if "sobremesa" in content or "doce" in content:
+                await adaptive_say(assistant, f"As nossas sobremesas são tradicionais portuguesas: {DESSERT_MENU}")
+                return
+            
+            # Check for menu inquiries
+            if "menu" in content or "cardápio" in content or "pratos" in content:
+                await adaptive_say(assistant, f"Aqui está o nosso menu principal: {MENU[:150]}...", context="menu_request")
+                return
+            
+            # Check for order confirmation
+            if "confirmar" in content or "confirmo" in content or "está correto" in content:
+                order_summary = conversation_tracker.get_order_summary()
+                await adaptive_say(assistant, f"Perfeito! O seu pedido foi confirmado: {order_summary}", context="confirmation")
+                # Send order to webhook
+                transcript_sent = conversation_tracker.send_to_webhook()
+                return
+            
+            # Check for order completion
+            if ("completo" in content or "terminar" in content or "finalizar" in content) and len(conversation_tracker.order_details["items"]) > 0:
+                order_summary = conversation_tracker.get_order_summary()
+                await adaptive_say(assistant, f"Resumindo o seu pedido: {order_summary}. Está tudo correto?", context="order_summary")
+                return
 
         # Track usage metrics
         usage_collector = metrics.UsageCollector()
@@ -877,9 +824,6 @@ async def entrypoint(ctx: JobContext):
                 # Log usage summary
                 summary = usage_collector.get_summary()
                 logger.info(f"Usage summary: {summary}")
-                
-                # Log final adaptive content stats
-                logger.info(f"Final verbosity level: {interaction_tracker.verbosity_level}")
                 
                 # Send conversation transcript to Make.com
                 logger.info("Sending conversation transcript to Make.com webhook")
@@ -915,18 +859,83 @@ async def entrypoint(ctx: JobContext):
             except Exception as e:
                 logger.error(f"Failed to send transcript on disconnect: {e}")
 
+        # Agent speech event handlers - essential for transcript tracking
+        @assistant.on("agent_speech_started")
+        def on_agent_speech_started():
+            logger.info("Agent started speaking")
+
+        @assistant.on("agent_speech_ended")
+        def on_agent_speech_ended():
+            logger.info("Agent stopped speaking")
+            interaction_tracker.record_agent_speech_end()
+        
+        @assistant.on("agent_speech_committed")
+        def on_agent_speech_committed(msg):
+            if hasattr(msg, 'content'):
+                content = msg.content
+                logger.info(f"Agent speech committed: {content}")
+                
+                # Add to transcript tracker
+                if content:
+                    conversation_tracker.add_assistant_message(content)
+
+        # DTMF handler with European Portuguese responses - critical for phone functionality
+        @assistant.on("dtmf_received")
+        def on_dtmf_received(digits):
+            logger.info(f"DTMF digits received: {digits}")
+            if digits == "1":
+                asyncio.create_task(
+                    adaptive_say(
+                        assistant,
+                        "Selecionou a opção de reserva. Por favor, indique a data, hora e número de pessoas para a sua reserva.",
+                        context="reservation"
+                    )
+                )
+            elif digits == "2":
+                asyncio.create_task(adaptive_say(
+                    assistant, 
+                    f"Aqui está o nosso menu de hoje: {MENU}", 
+                    context="menu_request"
+                ))
+            elif digits == "3":
+                asyncio.create_task(
+                    adaptive_say(
+                        assistant,
+                        "Vou transferir a sua chamada para um dos nossos colaboradores. Um momento, por favor.",
+                        context="transfer"
+                    )
+                )
+            elif digits == "4":
+                # Wine recommendations
+                asyncio.create_task(adaptive_say(
+                    assistant, 
+                    f"As nossas recomendações de vinhos: {WINE_RECOMMENDATIONS}",
+                    context="wine"
+                ))
+            elif digits == "5":
+                # Dessert menu
+                asyncio.create_task(adaptive_say(
+                    assistant, 
+                    f"A nossa carta de sobremesas: {DESSERT_MENU}",
+                    context="dessert"
+                ))
+            elif digits == "0":
+                asyncio.create_task(
+                    adaptive_say(
+                        assistant,
+                        "Muito obrigado pela sua chamada para o Restaurante Português. Até à próxima!",
+                        context="closing"
+                    )
+                )
+
         # Start the assistant
         logger.info("Starting voice assistant...")
         assistant.start(ctx.room, participant)
 
-        # Get appropriate greeting based on time of day
-        greeting = get_time_greeting()
-
-        # Initial greeting with European Portuguese phrasing
+        # Initial greeting optimized for immediate response
         await adaptive_say(
             assistant,
-            f"{greeting}! Bem-vindo ao Restaurante Português. O que gostaria de encomendar hoje?",
-            allow_interruptions=True,
+            "Olá! Restaurante Português, em que posso ajudar?",
             context="greeting"
         )
 
