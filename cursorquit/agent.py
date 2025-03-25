@@ -370,7 +370,13 @@ def prewarm(proc):
     """Preload models for faster startup"""
     try:
         logger.info("Preloading VAD model...")
-        proc.userdata["vad"] = silero.VAD.load()
+        proc.userdata["vad"] = silero.VAD.load(
+            min_speech_duration=0.05,    # Shorter speech detection
+            min_silence_duration=0.2,     # Shorter silence detection
+            activation_threshold=0.6,     # Lower threshold for faster activation
+            sample_rate=8000,            # Lower sample rate for faster processing
+            force_cpu=True               # Force CPU for more consistent performance
+        )
         logger.info("VAD model preloaded successfully")
     except Exception as e:
         logger.error(f"Failed to preload VAD model: {e}")
@@ -687,14 +693,12 @@ async def entrypoint(ctx: JobContext):
         stt = deepgram.STT(
             language="pt-PT",  # Specifically set to European Portuguese
             model="nova-2",
-            smart_format=True,  # Better formatting of numbers and currency
-            punctuate=True,     # Add proper punctuation
-            profanity_filter=False,  # Allow natural speech
-            keywords=[         # Restaurant-specific terms for better recognition
-                "bacalhau", "francesinha", "frango", "polvo", "grelhado",
-                "assado", "sobremesa", "vinho", "tinto", "branco",
-                "menu", "pedido", "encomenda", "prato", "dose", "meia"
-            ]
+            interim_results=True,  # Get results faster
+            no_delay=True,         # Don't wait for complete sentences
+            endpointing_ms=25,     # Faster end-of-speech detection
+            smart_format=False,    # Disable smart formatting for speed
+            filler_words=False,    # Disable filler words for faster processing
+            sample_rate=8000       # Lower sample rate for faster processing
         )
 
         # Use the preloaded VAD model if available
@@ -761,51 +765,38 @@ async def entrypoint(ctx: JobContext):
             # Start processing the full response immediately
             asyncio.create_task(process_user_speech(msg, content, assistant))
 
-        # Process user speech with full response logic - simplified
+        # Process user speech with full response logic - optimized for speed
         async def process_user_speech(msg, content, assistant, acknowledgment_task=None):
             # Extract order details if present
             conversation_tracker._extract_order_details(content)
             
-            # Check for regional cuisine inquiries
-            regions = ["norte", "porto", "douro", "centro", "bairrada", "lisboa", "alentejo", "algarve"]
-            for region in regions:
-                if region in content and ("especialidade" in content or "prato" in content or "típico" in content or "região" in content):
-                    await adaptive_say(assistant, get_regional_specialties(region))
-                    return
-            
-            # Check for wine inquiries
+            # Direct keyword matching for faster response
+            if "menu" in content or "cardápio" in content:
+                await adaptive_say(assistant, f"Aqui está o nosso menu principal: {MENU[:150]}...", context="menu_request")
+                return
+                
             if "vinho" in content:
-                # Execute the appropriate response based on the content
                 if "tinto" in content:
                     await adaptive_say(assistant, "Nos vinhos tintos, recomendo especialmente o nosso Quinta do Crasto Reserva do Douro.")
                 elif "branco" in content:
                     await adaptive_say(assistant, "Nos vinhos brancos, o Soalheiro Alvarinho de Vinho Verde é excelente para acompanhar pratos de peixe.")
-                elif "porto" in content or "do porto" in content:
+                elif "porto" in content:
                     await adaptive_say(assistant, "Temos uma excelente seleção de Vinhos do Porto. Recomendo o Taylor's 20 Anos para finalizar a sua refeição.")
                 else:
                     await adaptive_say(assistant, "Temos uma excelente carta de vinhos portugueses. Gostaria de conhecer os nossos tintos, brancos ou Vinhos do Porto?")
                 return
             
-            # Check for dessert inquiries
             if "sobremesa" in content or "doce" in content:
                 await adaptive_say(assistant, f"As nossas sobremesas são tradicionais portuguesas: {DESSERT_MENU}")
                 return
             
-            # Check for menu inquiries
-            if "menu" in content or "cardápio" in content or "pratos" in content:
-                await adaptive_say(assistant, f"Aqui está o nosso menu principal: {MENU[:150]}...", context="menu_request")
-                return
-            
-            # Check for order confirmation
-            if "confirmar" in content or "confirmo" in content or "está correto" in content:
+            if "confirmar" in content or "confirmo" in content:
                 order_summary = conversation_tracker.get_order_summary()
                 await adaptive_say(assistant, f"Perfeito! O seu pedido foi confirmado: {order_summary}", context="confirmation")
-                # Send order to webhook
-                transcript_sent = conversation_tracker.send_to_webhook()
+                conversation_tracker.send_to_webhook()
                 return
             
-            # Check for order completion
-            if ("completo" in content or "terminar" in content or "finalizar" in content) and len(conversation_tracker.order_details["items"]) > 0:
+            if ("completo" in content or "terminar" in content) and conversation_tracker.order_details["items"]:
                 order_summary = conversation_tracker.get_order_summary()
                 await adaptive_say(assistant, f"Resumindo o seu pedido: {order_summary}. Está tudo correto?", context="order_summary")
                 return
