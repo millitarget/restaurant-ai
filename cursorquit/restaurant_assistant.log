@@ -7470,3 +7470,271 @@ task: <Task pending name='Task-57' coro=<SpeechStream._run.<locals>.send_task() 
 task: <Task pending name='Task-58' coro=<SpeechStream._run.<locals>.recv_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:16> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Python312\Lib\asyncio\tasks.py:767]>
 2025-03-25 17:49:34,093 - asyncio - ERROR - Task was destroyed but it is pending!
 task: <Task pending name='Task-59' coro=<SpeechStream._run.<locals>.keepalive_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\plugins\deepgram\stt.py:441> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Python312\Lib\asyncio\tasks.py:767]>
+2025-03-26 09:21:59,392 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-26 09:21:59,414 - livekit.agents - DEV - Watching C:\Users\Utilizador\Desktop\livekit quit\cursorquit
+2025-03-26 09:22:03,325 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-26 09:22:03,337 - livekit.agents - INFO - starting worker
+2025-03-26 09:22:03,690 - livekit.agents - INFO - registered worker
+2025-03-26 12:25:50,295 - livekit.agents - WARNING - failed to connect to livekit, retrying in 0s: worker connection closed unexpectedly
+2025-03-26 12:25:51,574 - livekit.agents - WARNING - failed to connect to livekit, retrying in 2s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 12:25:53,589 - livekit.agents - WARNING - failed to connect to livekit, retrying in 4s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 12:25:57,632 - livekit.agents - WARNING - failed to connect to livekit, retrying in 6s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 12:26:03,657 - livekit.agents - WARNING - failed to connect to livekit, retrying in 8s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 12:26:11,673 - livekit.agents - WARNING - failed to connect to livekit, retrying in 10s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 12:26:21,686 - livekit.agents - WARNING - failed to connect to livekit, retrying in 10s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 12:26:31,720 - livekit.agents - WARNING - failed to connect to livekit, retrying in 10s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 12:26:43,223 - livekit.agents - INFO - registered worker
+2025-03-26 13:48:26,348 - livekit.agents - WARNING - failed to connect to livekit, retrying in 0s: worker connection closed unexpectedly
+2025-03-26 13:48:26,406 - livekit.agents - WARNING - failed to connect to livekit, retrying in 2s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 13:48:28,431 - livekit.agents - WARNING - failed to connect to livekit, retrying in 4s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 13:48:32,443 - livekit.agents - WARNING - failed to connect to livekit, retrying in 6s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 13:48:38,462 - livekit.agents - WARNING - failed to connect to livekit, retrying in 8s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 13:48:46,487 - livekit.agents - WARNING - failed to connect to livekit, retrying in 10s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 13:48:56,505 - livekit.agents - WARNING - failed to connect to livekit, retrying in 10s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 13:49:06,513 - livekit.agents - WARNING - failed to connect to livekit, retrying in 10s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 13:49:16,532 - livekit.agents - WARNING - failed to connect to livekit, retrying in 10s: Cannot connect to host cursorquit-304ysaxl.livekit.cloud:443 ssl:default [getaddrinfo failed]
+2025-03-26 13:49:27,862 - livekit.agents - INFO - registered worker
+2025-03-26 13:50:13,086 - livekit.agents - INFO - shutting down worker
+2025-03-26 18:37:04,022 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-26 18:37:04,027 - livekit.agents - DEV - Watching C:\Users\Utilizador\Desktop\livekit quit\cursorquit
+2025-03-26 18:37:06,420 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-26 18:37:06,425 - livekit.agents - INFO - starting worker
+2025-03-26 18:37:06,964 - livekit.agents - INFO - registered worker
+2025-03-26 18:37:09,779 - livekit.agents - INFO - received job request
+2025-03-26 18:37:09,891 - livekit.agents - INFO - initializing job runner
+2025-03-26 18:37:09,895 - portuguese-restaurant-assistant - INFO - Preloading VAD model...
+2025-03-26 18:37:10,253 - portuguese-restaurant-assistant - INFO - VAD model preloaded successfully
+2025-03-26 18:37:10,255 - livekit.agents - INFO - job runner initialized
+2025-03-26 18:37:10,255 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-26 18:37:10,257 - portuguese-restaurant-assistant - INFO - Starting Portuguese restaurant voice assistant for room call-_+351933792547_YURunHn5FkNo
+2025-03-26 18:37:10,257 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-26 18:37:10,259 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-26 18:37:10,259 - portuguese-restaurant-assistant - INFO - Initialized conversation tracker for order details and transcript
+2025-03-26 18:37:10,260 - portuguese-restaurant-assistant - INFO - Setting up assistant system prompt
+2025-03-26 18:37:10,261 - portuguese-restaurant-assistant - INFO - Connecting to LiveKit room...
+2025-03-26 18:37:10,282 - livekit - INFO - livekit_ffi::server:138:livekit_ffi::server - initializing ffi server v0.12.16
+2025-03-26 18:37:10,286 - livekit - INFO - livekit_ffi::cabi:36:livekit_ffi::cabi - initializing ffi server v0.12.16
+2025-03-26 18:37:10,334 - livekit - INFO - livekit_api::signal_client::signal_stream:96:livekit_api::signal_client::signal_stream - connecting to wss://cursorquit-304ysaxl.livekit.cloud/rtc?sdk=python&protocol=15&auto_subscribe=0&adaptive_stream=0&version=0.22.0&access_token=...
+2025-03-26 18:37:11,497 - livekit - DEBUG - rustls::anchors:150:rustls::anchors - add_parsable_certificates processed 39 valid and 0 invalid certs
+2025-03-26 18:37:11,500 - livekit - DEBUG - tokio_tungstenite::tls::encryption::rustls:103:tokio_tungstenite::tls::encryption::rustls - Added 39/39 native root certificates (ignored 0)
+2025-03-26 18:37:11,504 - livekit - DEBUG - rustls::client::hs:73:rustls::client::hs - No cached session for DnsName("cursorquit-304ysaxl.livekit.cloud")
+2025-03-26 18:37:11,508 - livekit - DEBUG - rustls::client::hs:132:rustls::client::hs - Not resuming any session
+2025-03-26 18:37:11,655 - livekit - DEBUG - rustls::client::hs:615:rustls::client::hs - Using ciphersuite TLS13_AES_128_GCM_SHA256
+2025-03-26 18:37:11,657 - livekit - DEBUG - rustls::client::tls13:142:rustls::client::tls13 - Not resuming
+2025-03-26 18:37:11,662 - livekit - DEBUG - rustls::client::tls13:381:rustls::client::tls13 - TLS1.3 encrypted extensions: []
+2025-03-26 18:37:11,665 - livekit - DEBUG - rustls::client::hs:472:rustls::client::hs - ALPN protocol is None
+2025-03-26 18:37:12,158 - livekit - DEBUG - tungstenite::handshake::client:95:tungstenite::handshake::client - Client handshake done.
+2025-03-26 18:37:13,785 - portuguese-restaurant-assistant - INFO - Waiting for a participant to join...
+2025-03-26 18:37:13,789 - portuguese-restaurant-assistant - INFO - Participant joined: sip_+351933792547
+2025-03-26 18:37:13,792 - portuguese-restaurant-assistant - INFO - Initializing voice assistant...
+2025-03-26 18:37:13,795 - portuguese-restaurant-assistant - INFO - Using OpenAI TTS (fallback)
+2025-03-26 18:37:14,686 - portuguese-restaurant-assistant - INFO - Starting voice assistant...
+2025-03-26 18:37:18,353 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-26 18:37:18,381 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=fc31a6a38f7d, ttfb=2.851326399948448, audio_duration=3.19
+2025-03-26 18:37:18,976 - livekit.agents - DEBUG - http_session(): creating a new httpclient ctx
+2025-03-26 18:37:21,537 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-26 18:37:21,543 - portuguese-restaurant-assistant - INFO - Agent speech committed: Boa tarde! Churrascaria Quitanda, em que posso ajudar?
+2025-03-26 18:37:21,546 - portuguese-restaurant-assistant - INFO - Added assistant message to transcript: Boa tarde! Churrascaria Quitanda, em que posso ajudar?
+2025-03-26 18:37:21,550 - portuguese-restaurant-assistant - INFO - Extracted customer name: em que
+2025-03-26 18:37:21,559 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-26 18:37:24,068 - livekit.agents - INFO - Pipeline STT metrics: duration=5.09, audio_duration=5.00
+2025-03-26 18:37:46,065 - livekit.agents - INFO - shutting down worker
+2025-03-26 18:37:46,072 - livekit.agents - DEBUG - shutting down job task
+2025-03-26 18:37:46,079 - livekit.agents - DEBUG - job exiting
+2025-03-26 18:37:46,246 - livekit - DEBUG - tungstenite::protocol:666:tungstenite::protocol - Received close frame: Some(CloseFrame { code: Normal, reason: "" })
+2025-03-26 18:37:46,266 - portuguese-restaurant-assistant - INFO - Usage summary: UsageSummary(llm_prompt_tokens=0, llm_completion_tokens=0, tts_characters_count=54, stt_audio_duration=4.99999999999999)
+2025-03-26 18:37:46,270 - portuguese-restaurant-assistant - INFO - Sending conversation transcript to Make.com webhook
+2025-03-26 18:37:46,273 - portuguese-restaurant-assistant - INFO - Sending transcript to Make.com webhook: https://hook.eu2.make.com/bsguyya5mpx4j3nnq715lmetg3jer76k
+2025-03-26 18:37:46,422 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): hook.eu2.make.com:443
+2025-03-26 18:37:46,894 - urllib3.connectionpool - DEBUG - https://hook.eu2.make.com:443 "POST /bsguyya5mpx4j3nnq715lmetg3jer76k HTTP/1.1" 200 8
+2025-03-26 18:37:46,899 - portuguese-restaurant-assistant - INFO - Transcript successfully sent to Make.com
+2025-03-26 18:37:46,904 - portuguese-restaurant-assistant - INFO - Transcript sent: True
+2025-03-26 18:37:46,907 - livekit.agents - DEBUG - http_session(): closing the httpclient ctx
+2025-03-26 18:37:47,043 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='job_user_entrypoint' coro=<entrypoint() running at C:\Users\Utilizador\Desktop\livekit quit\cursorquit\agent.py:947> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[_JobProc._run_job_task.<locals>.<lambda>() at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\ipc\job_proc_lazy_main.py:239, _JobProc._run_job_task.<locals>.log_exception() at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\ipc\job_proc_lazy_main.py:241]>
+2025-03-26 18:37:47,052 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-28' coro=<VoicePipelineAgent._main_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:16> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:37:47,056 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-61' coro=<SpeechStream._run.<locals>.send_task() done, defined at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:13> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Python312\Lib\asyncio\tasks.py:767]>
+2025-03-26 18:37:47,060 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-62' coro=<SpeechStream._run.<locals>.recv_task() done, defined at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:13> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Python312\Lib\asyncio\tasks.py:767]>
+2025-03-26 18:37:47,062 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-64' coro=<Event.wait() done, defined at C:\Python312\Lib\asyncio\locks.py:199> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[_wait.<locals>._on_completion() at C:\Python312\Lib\asyncio\tasks.py:534]>
+2025-03-26 18:37:47,065 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-50' coro=<HumanInput._recognize_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:16> wait_for=<_GatheringFuture pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:37:47,067 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='STT._metrics_task' coro=<RecognizeStream._metrics_monitor_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\stt\stt.py:249> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:37:47,069 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-54' coro=<RecognizeStream._main_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\stt\stt.py:219> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[RecognizeStream.__init__.<locals>.<lambda>() at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\stt\stt.py:204]>
+2025-03-26 18:37:47,072 - livekit.agents.pipeline - ERROR - Error in _recognize_task
+Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\pipeline\human_input.py", line 158, in _recognize_task
+    await asyncio.gather(*tasks)
+GeneratorExit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py", line 16, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\pipeline\human_input.py", line 160, in _recognize_task
+    await utils.aio.gracefully_cancel(*tasks)
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\aio\__init__.py", line 12, in gracefully_cancel
+    loop = asyncio.get_running_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: no running event loop
+2025-03-26 18:37:47,107 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-58' coro=<HumanInput._recognize_task.<locals>._stt_stream_co() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\pipeline\human_input.py:144> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Python312\Lib\asyncio\tasks.py:767]>
+2025-03-26 18:37:47,109 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-57' coro=<HumanInput._recognize_task.<locals>._vad_stream_co() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\pipeline\human_input.py:132> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Python312\Lib\asyncio\tasks.py:767]>
+2025-03-26 18:37:47,112 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='TTS._metrics_task' coro=<VADStream._metrics_monitor_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\vad.py:115> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:37:47,114 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-52' coro=<VADStream._main_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:16> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[VADStream.__init__.<locals>.<lambda>() at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\vad.py:104, VADStream.__init__.<locals>.<lambda>() at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\plugins\silero\vad.py:209]>
+2025-03-26 18:37:47,116 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-55' coro=<STTSegmentsForwarder._run() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\transcription\stt_forwarder.py:64> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:37:47,123 - livekit.agents - ERROR - error in stt transcription
+Traceback (most recent call last):
+  File "C:\Python312\Lib\asyncio\queues.py", line 158, in get
+    await getter
+GeneratorExit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\transcription\stt_forwarder.py", line 64, in _run
+    seg = await self._queue.get()
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\queues.py", line 160, in get
+    getter.cancel()  # Just in case getter is not done yet.
+    ^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\base_events.py", line 795, in call_soon
+    self._check_closed()
+  File "C:\Python312\Lib\asyncio\base_events.py", line 541, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed
+2025-03-26 18:37:52,392 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-26 18:37:52,395 - livekit.agents - DEV - Watching C:\Users\Utilizador\Desktop\livekit quit\cursorquit
+2025-03-26 18:37:55,131 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-26 18:37:55,138 - livekit.agents - INFO - starting worker
+2025-03-26 18:37:56,255 - livekit.agents - INFO - registered worker
+2025-03-26 18:37:58,609 - livekit.agents - INFO - received job request
+2025-03-26 18:37:58,792 - livekit.agents - INFO - initializing job runner
+2025-03-26 18:37:58,793 - portuguese-restaurant-assistant - INFO - Preloading VAD model...
+2025-03-26 18:37:59,029 - portuguese-restaurant-assistant - INFO - VAD model preloaded successfully
+2025-03-26 18:37:59,029 - livekit.agents - INFO - job runner initialized
+2025-03-26 18:37:59,039 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-26 18:37:59,041 - portuguese-restaurant-assistant - INFO - Starting Portuguese restaurant voice assistant for room call-_+351933792547_ZB7oojCJkUr4
+2025-03-26 18:37:59,041 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-26 18:37:59,043 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-26 18:37:59,043 - portuguese-restaurant-assistant - INFO - Initialized conversation tracker for order details and transcript
+2025-03-26 18:37:59,044 - portuguese-restaurant-assistant - INFO - Setting up assistant system prompt
+2025-03-26 18:37:59,045 - portuguese-restaurant-assistant - INFO - Connecting to LiveKit room...
+2025-03-26 18:37:59,048 - livekit - INFO - livekit_ffi::server:138:livekit_ffi::server - initializing ffi server v0.12.16
+2025-03-26 18:37:59,049 - livekit - INFO - livekit_ffi::cabi:36:livekit_ffi::cabi - initializing ffi server v0.12.16
+2025-03-26 18:37:59,051 - livekit - INFO - livekit_api::signal_client::signal_stream:96:livekit_api::signal_client::signal_stream - connecting to wss://cursorquit-304ysaxl.livekit.cloud/rtc?sdk=python&protocol=15&auto_subscribe=0&adaptive_stream=0&version=0.22.0&access_token=...
+2025-03-26 18:38:02,214 - livekit - DEBUG - rustls::anchors:150:rustls::anchors - add_parsable_certificates processed 39 valid and 0 invalid certs
+2025-03-26 18:38:02,218 - livekit - DEBUG - tokio_tungstenite::tls::encryption::rustls:103:tokio_tungstenite::tls::encryption::rustls - Added 39/39 native root certificates (ignored 0)
+2025-03-26 18:38:02,222 - livekit - DEBUG - rustls::client::hs:73:rustls::client::hs - No cached session for DnsName("cursorquit-304ysaxl.livekit.cloud")
+2025-03-26 18:38:02,225 - livekit - DEBUG - rustls::client::hs:132:rustls::client::hs - Not resuming any session
+2025-03-26 18:38:02,421 - livekit - DEBUG - rustls::client::hs:615:rustls::client::hs - Using ciphersuite TLS13_AES_128_GCM_SHA256
+2025-03-26 18:38:02,424 - livekit - DEBUG - rustls::client::tls13:142:rustls::client::tls13 - Not resuming
+2025-03-26 18:38:02,425 - livekit - DEBUG - rustls::client::tls13:381:rustls::client::tls13 - TLS1.3 encrypted extensions: []
+2025-03-26 18:38:02,429 - livekit - DEBUG - rustls::client::hs:472:rustls::client::hs - ALPN protocol is None
+2025-03-26 18:38:02,757 - livekit - DEBUG - tungstenite::handshake::client:95:tungstenite::handshake::client - Client handshake done.
+2025-03-26 18:38:04,376 - portuguese-restaurant-assistant - INFO - Waiting for a participant to join...
+2025-03-26 18:38:04,381 - portuguese-restaurant-assistant - INFO - Participant joined: sip_+351933792547
+2025-03-26 18:38:04,383 - portuguese-restaurant-assistant - INFO - Initializing voice assistant...
+2025-03-26 18:38:04,386 - portuguese-restaurant-assistant - INFO - Using OpenAI TTS (fallback)
+2025-03-26 18:38:05,434 - portuguese-restaurant-assistant - INFO - Starting voice assistant...
+2025-03-26 18:38:06,968 - livekit.agents - DEBUG - http_session(): creating a new httpclient ctx
+2025-03-26 18:38:07,482 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-26 18:38:07,898 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=ed14aa4c0835, ttfb=1.9104099001269788, audio_duration=3.28
+2025-03-26 18:38:10,757 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-26 18:38:10,759 - portuguese-restaurant-assistant - INFO - Agent speech committed: Boa tarde! Churrascaria Quitanda, em que posso ajudar?
+2025-03-26 18:38:10,762 - portuguese-restaurant-assistant - INFO - Added assistant message to transcript: Boa tarde! Churrascaria Quitanda, em que posso ajudar?
+2025-03-26 18:38:10,769 - portuguese-restaurant-assistant - INFO - Extracted customer name: em que
+2025-03-26 18:38:10,779 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-26 18:38:12,064 - livekit.agents - INFO - Pipeline STT metrics: duration=5.09, audio_duration=5.00
+2025-03-26 18:38:13,878 - livekit.agents - INFO - shutting down worker
+2025-03-26 18:38:13,885 - livekit.agents - DEBUG - shutting down job task
+2025-03-26 18:38:13,896 - livekit.agents - DEBUG - job exiting
+2025-03-26 18:38:13,974 - livekit - DEBUG - tungstenite::protocol:666:tungstenite::protocol - Received close frame: Some(CloseFrame { code: Normal, reason: "" })
+2025-03-26 18:38:13,987 - livekit - INFO - livekit::room:1191:livekit::room - disconnected from room with reason: ClientInitiated
+2025-03-26 18:38:13,992 - portuguese-restaurant-assistant - INFO - Room disconnected
+2025-03-26 18:38:13,994 - portuguese-restaurant-assistant - INFO - Room disconnected, sending conversation transcript to Make.com
+2025-03-26 18:38:13,998 - portuguese-restaurant-assistant - INFO - Usage summary: UsageSummary(llm_prompt_tokens=0, llm_completion_tokens=0, tts_characters_count=54, stt_audio_duration=4.99999999999999)
+2025-03-26 18:38:14,001 - portuguese-restaurant-assistant - INFO - Sending conversation transcript to Make.com webhook
+2025-03-26 18:38:14,004 - portuguese-restaurant-assistant - INFO - Sending transcript to Make.com webhook: https://hook.eu2.make.com/bsguyya5mpx4j3nnq715lmetg3jer76k
+2025-03-26 18:38:14,015 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): hook.eu2.make.com:443
+2025-03-26 18:38:14,553 - urllib3.connectionpool - DEBUG - https://hook.eu2.make.com:443 "POST /bsguyya5mpx4j3nnq715lmetg3jer76k HTTP/1.1" 200 8
+2025-03-26 18:38:14,557 - portuguese-restaurant-assistant - INFO - Transcript successfully sent to Make.com
+2025-03-26 18:38:14,561 - portuguese-restaurant-assistant - INFO - Transcript sent: True
+2025-03-26 18:38:14,564 - livekit.agents - DEBUG - http_session(): closing the httpclient ctx
+2025-03-26 18:38:14,641 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='job_user_entrypoint' coro=<entrypoint() running at C:\Users\Utilizador\Desktop\livekit quit\cursorquit\agent.py:947> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[_JobProc._run_job_task.<locals>.<lambda>() at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\ipc\job_proc_lazy_main.py:239, _JobProc._run_job_task.<locals>.log_exception() at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\ipc\job_proc_lazy_main.py:241]>
+2025-03-26 18:38:14,643 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-28' coro=<VoicePipelineAgent._main_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:16> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:38:14,644 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-61' coro=<SpeechStream._run.<locals>.send_task() done, defined at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:13> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Python312\Lib\asyncio\tasks.py:767]>
+2025-03-26 18:38:14,646 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-62' coro=<SpeechStream._run.<locals>.recv_task() done, defined at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:13> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Python312\Lib\asyncio\tasks.py:767]>
+2025-03-26 18:38:14,647 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-64' coro=<Event.wait() done, defined at C:\Python312\Lib\asyncio\locks.py:199> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[_wait.<locals>._on_completion() at C:\Python312\Lib\asyncio\tasks.py:534]>
+2025-03-26 18:38:14,649 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-68' coro=<entrypoint.<locals>.send_transcript_on_disconnect() done, defined at C:\Users\Utilizador\Desktop\livekit quit\cursorquit\agent.py:859> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:38:14,650 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-48' coro=<HumanInput._recognize_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:16> wait_for=<_GatheringFuture pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:38:14,651 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-50' coro=<VADStream._main_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py:16> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[VADStream.__init__.<locals>.<lambda>() at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\vad.py:104, VADStream.__init__.<locals>.<lambda>() at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\plugins\silero\vad.py:209]>
+2025-03-26 18:38:14,652 - livekit.agents.pipeline - ERROR - Error in _recognize_task
+Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\pipeline\human_input.py", line 158, in _recognize_task
+    await asyncio.gather(*tasks)
+GeneratorExit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py", line 16, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\pipeline\human_input.py", line 160, in _recognize_task
+    await utils.aio.gracefully_cancel(*tasks)
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\aio\__init__.py", line 12, in gracefully_cancel
+    loop = asyncio.get_running_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: no running event loop
+2025-03-26 18:38:14,659 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-56' coro=<HumanInput._recognize_task.<locals>._stt_stream_co() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\pipeline\human_input.py:144> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Python312\Lib\asyncio\tasks.py:767]>
+2025-03-26 18:38:14,661 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-55' coro=<HumanInput._recognize_task.<locals>._vad_stream_co() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\pipeline\human_input.py:132> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Python312\Lib\asyncio\tasks.py:767]>
+2025-03-26 18:38:14,663 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-52' coro=<RecognizeStream._main_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\stt\stt.py:219> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[RecognizeStream.__init__.<locals>.<lambda>() at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\stt\stt.py:204]>
+2025-03-26 18:38:14,695 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='TTS._metrics_task' coro=<VADStream._metrics_monitor_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\vad.py:115> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:38:14,700 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-53' coro=<STTSegmentsForwarder._run() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\transcription\stt_forwarder.py:64> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:38:14,701 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='STT._metrics_task' coro=<RecognizeStream._metrics_monitor_task() running at C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\stt\stt.py:249> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-03-26 18:38:14,702 - livekit.agents - ERROR - error in stt transcription
+Traceback (most recent call last):
+  File "C:\Python312\Lib\asyncio\queues.py", line 158, in get
+    await getter
+GeneratorExit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\transcription\stt_forwarder.py", line 64, in _run
+    seg = await self._queue.get()
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\queues.py", line 160, in get
+    getter.cancel()  # Just in case getter is not done yet.
+    ^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\base_events.py", line 795, in call_soon
+    self._check_closed()
+  File "C:\Python312\Lib\asyncio\base_events.py", line 541, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed

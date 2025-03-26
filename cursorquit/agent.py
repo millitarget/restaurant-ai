@@ -131,10 +131,14 @@ Sobremesas Tradicionais:
 6. Toucinho do céu
 """
 
-# System prompt for the assistant - Updated for European Portuguese takeout orders
-SYSTEM_PROMPT = """És um assistente de restaurante português que atende encomendas takeaway. 
+# System prompt for the assistant - Updated for Quitanda
+SYSTEM_PROMPT = """És um assistente da Churrascaria Quitanda que atende encomendas takeaway. 
 Responde em português europeu, conciso e natural. Recolhe: 1) items do menu, 2) hora de levantamento, 
-3) nome do cliente. Sê formal ("o senhor"/"a senhora"). Respostas breves como numa chamada telefónica real."""
+3) nome do cliente. Sê formal ("o senhor"/"a senhora"). Respostas breves como numa chamada telefónica real.
+
+IMPORTANTE: Só aceites pedidos que estejam EXATAMENTE no menu da Quitanda. Se o cliente pedir algo que não está no menu, 
+informe gentilmente que não está disponível e sugira alternativas do menu atual. Nunca aceite variações ou modificações 
+dos pratos que não estejam explicitamente listadas no menu."""
 
 # Make.com webhook URL for sending transcript
 MAKE_WEBHOOK_URL = os.getenv("MAKE_WEBHOOK_URL", "https://hook.eu2.make.com/your_webhook_id_here")
@@ -532,15 +536,17 @@ def elaborate_response(text, context=None):
 # Common pre-generated responses for faster interaction
 COMMON_RESPONSES = {
     "greeting": {
-        "morning": "Bom dia! Restaurante Português, em que posso ajudar?",
-        "afternoon": "Boa tarde! Restaurante Português, em que posso ajudar?",
-        "evening": "Boa noite! Restaurante Português, em que posso ajudar?"
+        "morning": "Bom dia! Churrascaria Quitanda, em que posso ajudar?",
+        "afternoon": "Boa tarde! Churrascaria Quitanda, em que posso ajudar?",
+        "evening": "Boa noite! Churrascaria Quitanda, em que posso ajudar?"
     },
-    "menu_request": f"Aqui está o nosso menu principal. O que gostaria de encomendar?",
+    "menu_request": "Aqui está o nosso menu principal. O que gostaria de encomendar?",
     "confirmation": "Perfeito! Vou registar o seu pedido.",
     "thanks": "Muito obrigado pela sua encomenda.",
     "wait": ["Um momento...", "Já verifico...", "Vou ver isso...", "Um instante por favor..."],
-    "acknowledgment": ["Entendido.", "Compreendo.", "Certo.", "Claro.", "Sim."]
+    "acknowledgment": ["Entendido.", "Compreendo.", "Certo.", "Claro.", "Sim."],
+    "not_available": "Peço desculpa, mas esse item não está disponível no nosso menu atual. Posso sugerir algumas alternativas do nosso cardápio?",
+    "item_not_found": "Peço desculpa, mas não encontro esse item no nosso menu. Gostaria que eu lesse o menu novamente?"
 }
 
 # Custom say function - simplified for faster performance 
@@ -614,19 +620,22 @@ async def entrypoint(ctx: JobContext):
     # Add examples of European Portuguese responses
     initial_ctx = initial_ctx.append(
         role="system",
-        text="""Exemplos de respostas em português europeu:
+        text="""Exemplos de respostas em português europeu para a Churrascaria Quitanda:
         
-        Para pedido de reserva:
-        "Com certeza! Para quantas pessoas deseja a reserva? E para que dia e hora, por favor?"
+        Para pedido de menu:
+        "Aqui está o nosso menu. Temos pratos de carne como Frango do Churrasco, Espetadas, Entrecosto, e também Bacalhau assado na brasa. Como acompanhamento, temos batatas fritas, arroz, saladas e broa. O que gostaria de encomendar?"
         
-        Para pedido de recomendação:
-        "Ora bem, hoje recomendo especialmente o Bacalhau à Lagareiro. É preparado com o melhor azeite português e acompanhado de batata a murro. É uma delícia!"
+        Para pedido não disponível:
+        "Peço desculpa, mas esse item não está disponível no nosso menu atual. Posso sugerir algumas alternativas? Por exemplo, temos o Frango do Churrasco ou a Espetada de Guia."
         
-        Para informação sobre vinhos:
-        "Temos uma excelente seleção de vinhos portugueses. Posso sugerir um Douro tinto que combina perfeitamente com o nosso bacalhau?"
+        Para pedido de bebidas:
+        "Temos refrigerantes em garrafa de 1L e 1.5L, e uma seleção de vinhos portugueses. Gostaria de conhecer as nossas opções?"
+        
+        Para confirmação de pedido:
+        "Perfeito! Vou registar o seu pedido. Para confirmar, o senhor/a senhora pediu [item] com [acompanhamento]. Está correto?"
         
         Para despedida:
-        "Muito obrigado pela sua visita. Esperamos vê-lo novamente em breve. Até à próxima!"
+        "Muito obrigado pela sua encomenda. Esperamos servi-lo novamente em breve. Até à próxima!"
         """
     )
 
@@ -698,7 +707,14 @@ async def entrypoint(ctx: JobContext):
             endpointing_ms=25,     # Faster end-of-speech detection
             smart_format=False,    # Disable smart formatting for speed
             filler_words=False,    # Disable filler words for faster processing
-            sample_rate=8000       # Lower sample rate for faster processing
+            sample_rate=8000,      # Lower sample rate for faster processing
+            keywords=[            # Menu-specific terms for better recognition
+                ("menu", 0.8), ("cardápio", 0.8), ("pedido", 0.8),
+                ("confirmar", 0.8), ("confirmo", 0.8), ("completo", 0.8),
+                ("terminar", 0.8), ("prato", 0.7), ("dose", 0.7),
+                ("meia", 0.7), ("entrada", 0.7), ("sobremesa", 0.7),
+                ("bebida", 0.7), ("água", 0.7), ("refrigerante", 0.7)
+            ]
         )
 
         # Use the preloaded VAD model if available
@@ -777,13 +793,13 @@ async def entrypoint(ctx: JobContext):
                 
             if "vinho" in content:
                 if "tinto" in content:
-                    await adaptive_say(assistant, "Nos vinhos tintos, recomendo especialmente o nosso Quinta do Crasto Reserva do Douro.")
+                    await adaptive_say(assistant, "Nos vinhos tintos, temos o Monte Velho Tinto e o Eugénio de Almeida Tinto, ambos a 7.00€.")
                 elif "branco" in content:
-                    await adaptive_say(assistant, "Nos vinhos brancos, o Soalheiro Alvarinho de Vinho Verde é excelente para acompanhar pratos de peixe.")
-                elif "porto" in content:
-                    await adaptive_say(assistant, "Temos uma excelente seleção de Vinhos do Porto. Recomendo o Taylor's 20 Anos para finalizar a sua refeição.")
+                    await adaptive_say(assistant, "Nos vinhos brancos, temos o Muralhas Monção e o Casal Garcia, ambos a 7.00€.")
+                elif "verde" in content:
+                    await adaptive_say(assistant, "Temos o Vinho da Casa Cruzeiro Lima, disponível em branco e tinto, a 4.00€.")
                 else:
-                    await adaptive_say(assistant, "Temos uma excelente carta de vinhos portugueses. Gostaria de conhecer os nossos tintos, brancos ou Vinhos do Porto?")
+                    await adaptive_say(assistant, "Temos uma excelente carta de vinhos portugueses. Gostaria de conhecer os nossos tintos, brancos ou vinhos verdes?")
                 return
             
             if "sobremesa" in content or "doce" in content:
@@ -870,7 +886,7 @@ async def entrypoint(ctx: JobContext):
                 if content:
                     conversation_tracker.add_assistant_message(content)
 
-        # DTMF handler with European Portuguese responses - critical for phone functionality
+        # DTMF handler with Quitanda-specific responses
         @assistant.on("dtmf_received")
         def on_dtmf_received(digits):
             logger.info(f"DTMF digits received: {digits}")
@@ -878,43 +894,39 @@ async def entrypoint(ctx: JobContext):
                 asyncio.create_task(
                     adaptive_say(
                         assistant,
-                        "Selecionou a opção de reserva. Por favor, indique a data, hora e número de pessoas para a sua reserva.",
-                        context="reservation"
+                        "Selecionou a opção de menu. Aqui está o nosso cardápio: " + MENU[:150] + "...",
+                        context="menu_request"
                     )
                 )
             elif digits == "2":
-                asyncio.create_task(adaptive_say(
-                    assistant, 
-                    f"Aqui está o nosso menu de hoje: {MENU}", 
-                    context="menu_request"
-                ))
+                asyncio.create_task(
+                    adaptive_say(
+                        assistant,
+                        "Selecionou a opção de bebidas. Temos refrigerantes em garrafa de 1L e 1.5L, e uma seleção de vinhos portugueses. Gostaria de conhecer as nossas opções?",
+                        context="drinks"
+                    )
+                )
             elif digits == "3":
                 asyncio.create_task(
                     adaptive_say(
                         assistant,
-                        "Vou transferir a sua chamada para um dos nossos colaboradores. Um momento, por favor.",
-                        context="transfer"
+                        "Selecionou a opção de sobremesas. " + DESSERT_MENU,
+                        context="dessert"
                     )
                 )
             elif digits == "4":
-                # Wine recommendations
-                asyncio.create_task(adaptive_say(
-                    assistant, 
-                    f"As nossas recomendações de vinhos: {WINE_RECOMMENDATIONS}",
-                    context="wine"
-                ))
-            elif digits == "5":
-                # Dessert menu
-                asyncio.create_task(adaptive_say(
-                    assistant, 
-                    f"A nossa carta de sobremesas: {DESSERT_MENU}",
-                    context="dessert"
-                ))
+                asyncio.create_task(
+                    adaptive_say(
+                        assistant,
+                        "Selecionou a opção de vinhos. Temos uma excelente carta de vinhos portugueses. Gostaria de conhecer os nossos tintos, brancos ou vinhos verdes?",
+                        context="wine"
+                    )
+                )
             elif digits == "0":
                 asyncio.create_task(
                     adaptive_say(
                         assistant,
-                        "Muito obrigado pela sua chamada para o Restaurante Português. Até à próxima!",
+                        "Muito obrigado pela sua chamada para a Churrascaria Quitanda. Até à próxima!",
                         context="closing"
                     )
                 )
@@ -926,7 +938,7 @@ async def entrypoint(ctx: JobContext):
         # Initial greeting optimized for immediate response
         await adaptive_say(
             assistant,
-            "Olá! Restaurante Português, em que posso ajudar?",
+            "Churrascaria Quitanda, em que posso ajudar?",
             context="greeting"
         )
 
