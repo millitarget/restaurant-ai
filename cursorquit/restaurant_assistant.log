@@ -7738,3 +7738,475 @@ Traceback (most recent call last):
   File "C:\Python312\Lib\asyncio\base_events.py", line 541, in _check_closed
     raise RuntimeError('Event loop is closed')
 RuntimeError: Event loop is closed
+2025-03-28 16:32:46,888 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:32:46,894 - livekit.agents - DEV - Watching C:\Users\Utilizador\Desktop\livekit quit\cursorquit
+2025-03-28 16:32:52,691 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:32:52,707 - livekit.agents - INFO - starting worker
+2025-03-28 16:32:53,043 - livekit.agents - INFO - registered worker
+2025-03-28 16:33:13,415 - livekit.agents - INFO - received job request
+2025-03-28 16:33:13,483 - livekit.agents - INFO - initializing job runner
+2025-03-28 16:33:13,485 - portuguese-restaurant-assistant - INFO - Preloading VAD model...
+2025-03-28 16:33:13,896 - portuguese-restaurant-assistant - INFO - VAD model preloaded successfully
+2025-03-28 16:33:13,896 - livekit.agents - INFO - job runner initialized
+2025-03-28 16:33:13,901 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:33:13,903 - portuguese-restaurant-assistant - INFO - Starting Portuguese restaurant voice assistant for room sbx-16jzjr-D8DqyF3jdKeJkCvFhBCa47
+2025-03-28 16:33:13,907 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:33:13,907 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:33:13,907 - portuguese-restaurant-assistant - INFO - Initialized conversation tracker for order details and transcript
+2025-03-28 16:33:13,907 - portuguese-restaurant-assistant - INFO - Setting up assistant system prompt
+2025-03-28 16:33:13,907 - portuguese-restaurant-assistant - INFO - Connecting to LiveKit room...
+2025-03-28 16:33:13,931 - livekit - INFO - livekit_ffi::server:138:livekit_ffi::server - initializing ffi server v0.12.16
+2025-03-28 16:33:13,933 - livekit - INFO - livekit_ffi::cabi:36:livekit_ffi::cabi - initializing ffi server v0.12.16
+2025-03-28 16:33:13,971 - livekit - INFO - livekit_api::signal_client::signal_stream:96:livekit_api::signal_client::signal_stream - connecting to wss://cursorquit-304ysaxl.livekit.cloud/rtc?sdk=python&protocol=15&auto_subscribe=0&adaptive_stream=0&version=0.22.0&access_token=...
+2025-03-28 16:33:14,052 - livekit - DEBUG - rustls::anchors:150:rustls::anchors - add_parsable_certificates processed 39 valid and 0 invalid certs
+2025-03-28 16:33:14,054 - livekit - DEBUG - tokio_tungstenite::tls::encryption::rustls:103:tokio_tungstenite::tls::encryption::rustls - Added 39/39 native root certificates (ignored 0)
+2025-03-28 16:33:14,055 - livekit - DEBUG - rustls::client::hs:73:rustls::client::hs - No cached session for DnsName("cursorquit-304ysaxl.livekit.cloud")
+2025-03-28 16:33:14,056 - livekit - DEBUG - rustls::client::hs:132:rustls::client::hs - Not resuming any session
+2025-03-28 16:33:14,159 - livekit - DEBUG - rustls::client::hs:615:rustls::client::hs - Using ciphersuite TLS13_AES_128_GCM_SHA256
+2025-03-28 16:33:14,162 - livekit - DEBUG - rustls::client::tls13:142:rustls::client::tls13 - Not resuming
+2025-03-28 16:33:14,164 - livekit - DEBUG - rustls::client::tls13:381:rustls::client::tls13 - TLS1.3 encrypted extensions: []
+2025-03-28 16:33:14,165 - livekit - DEBUG - rustls::client::hs:472:rustls::client::hs - ALPN protocol is None
+2025-03-28 16:33:14,361 - livekit - DEBUG - tungstenite::handshake::client:95:tungstenite::handshake::client - Client handshake done.
+2025-03-28 16:33:14,775 - portuguese-restaurant-assistant - INFO - Waiting for a participant to join...
+2025-03-28 16:33:14,775 - portuguese-restaurant-assistant - INFO - Participant joined: virtualized-wireframe
+2025-03-28 16:33:14,777 - portuguese-restaurant-assistant - INFO - Initializing voice assistant...
+2025-03-28 16:33:14,777 - portuguese-restaurant-assistant - INFO - Using OpenAI TTS (fallback)
+2025-03-28 16:33:16,609 - portuguese-restaurant-assistant - INFO - Starting voice assistant...
+2025-03-28 16:33:19,491 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-28 16:33:19,507 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=4f66d1a4e7e2, ttfb=2.812502299901098, audio_duration=3.23
+2025-03-28 16:33:22,733 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:33:22,735 - portuguese-restaurant-assistant - INFO - Agent speech committed: Boa tarde! Churrascaria Quitanda, em que posso ajudar?
+2025-03-28 16:33:22,737 - portuguese-restaurant-assistant - INFO - Added assistant message to transcript: Boa tarde! Churrascaria Quitanda, em que posso ajudar?
+2025-03-28 16:33:22,739 - portuguese-restaurant-assistant - INFO - Extracted customer name: em que
+2025-03-28 16:33:22,743 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-28 16:33:51,994 - livekit - DEBUG - tungstenite::protocol:666:tungstenite::protocol - Received close frame: Some(CloseFrame { code: Normal, reason: "" })
+2025-03-28 16:33:51,997 - livekit.agents - DEBUG - shutting down job task
+2025-03-28 16:33:51,999 - livekit - DEBUG - tungstenite::protocol:683:tungstenite::protocol - Replying to close with Frame { header: FrameHeader { is_final: true, rsv1: false, rsv2: false, rsv3: false, opcode: Control(Close), mask: None }, payload: [3, 232] }
+2025-03-28 16:33:52,005 - livekit.agents - DEBUG - job exiting
+2025-03-28 16:33:52,028 - livekit - WARNING - livekit::rtc_engine:446:livekit::rtc_engine - received session close: "signal client closed: \"stream closed\"" UnknownReason Resume
+2025-03-28 16:33:52,059 - portuguese-restaurant-assistant - INFO - Usage summary: UsageSummary(llm_prompt_tokens=0, llm_completion_tokens=0, tts_characters_count=54, stt_audio_duration=0.0)
+2025-03-28 16:33:52,062 - portuguese-restaurant-assistant - INFO - Sending conversation transcript to Make.com webhook
+2025-03-28 16:33:52,065 - portuguese-restaurant-assistant - INFO - Sending transcript to Make.com webhook: https://hook.eu2.make.com/bsguyya5mpx4j3nnq715lmetg3jer76k
+2025-03-28 16:33:52,130 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): hook.eu2.make.com:443
+2025-03-28 16:33:52,426 - urllib3.connectionpool - DEBUG - https://hook.eu2.make.com:443 "POST /bsguyya5mpx4j3nnq715lmetg3jer76k HTTP/1.1" 200 8
+2025-03-28 16:33:52,433 - portuguese-restaurant-assistant - INFO - Transcript successfully sent to Make.com
+2025-03-28 16:33:52,439 - portuguese-restaurant-assistant - INFO - Transcript sent: True
+2025-03-28 16:33:52,441 - livekit.agents - DEBUG - http_session(): closing the httpclient ctx
+2025-03-28 16:33:52,443 - livekit.agents - DEBUG - http_session(): creating a new httpclient ctx
+2025-03-28 16:34:33,481 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:34:33,493 - livekit.agents - INFO - starting worker
+2025-03-28 16:34:33,503 - livekit.agents - ERROR - Error in _read_ipc_task
+Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\aio\duplex_unix.py", line 35, in recv_bytes
+    len_bytes = await self._reader.readexactly(4)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\streams.py", line 750, in readexactly
+    raise exceptions.IncompleteReadError(incomplete, n)
+asyncio.exceptions.IncompleteReadError: 0 bytes read on a total of 4 expected bytes
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py", line 16, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\cli\watcher.py", line 120, in _read_ipc_task
+    msg = await channel.arecv_message(self._pch, proto.IPC_MESSAGES)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\ipc\channel.py", line 47, in arecv_message
+    return _read_message(await dplx.recv_bytes(), messages)
+                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\aio\duplex_unix.py", line 43, in recv_bytes
+    raise DuplexClosed()
+livekit.agents.utils.aio.duplex_unix.DuplexClosed
+2025-03-28 16:34:33,828 - livekit.agents - INFO - registered worker
+2025-03-28 16:34:44,443 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:34:44,448 - livekit.agents - INFO - starting worker
+2025-03-28 16:34:44,803 - livekit.agents - INFO - registered worker
+2025-03-28 16:35:23,263 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:35:23,291 - livekit.agents - DEV - Watching C:\Users\Utilizador\Desktop\livekit quit\cursorquit
+2025-03-28 16:35:26,889 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:35:26,902 - livekit.agents - INFO - starting worker
+2025-03-28 16:35:27,217 - livekit.agents - INFO - registered worker
+2025-03-28 16:35:34,672 - livekit.agents - INFO - received job request
+2025-03-28 16:35:34,744 - livekit.agents - INFO - initializing job runner
+2025-03-28 16:35:34,752 - portuguese-restaurant-assistant - INFO - Preloading VAD model...
+2025-03-28 16:35:35,201 - portuguese-restaurant-assistant - INFO - VAD model preloaded successfully
+2025-03-28 16:35:35,201 - livekit.agents - INFO - job runner initialized
+2025-03-28 16:35:35,203 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:35:35,206 - portuguese-restaurant-assistant - INFO - Starting Portuguese restaurant voice assistant for room sbx-16jzjr-49dUZDfSKVhLpzjqkuUQuT
+2025-03-28 16:35:35,206 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:35:35,208 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:35:35,209 - portuguese-restaurant-assistant - INFO - Initialized conversation tracker for order details and transcript
+2025-03-28 16:35:35,209 - portuguese-restaurant-assistant - INFO - Setting up assistant system prompt
+2025-03-28 16:35:35,210 - portuguese-restaurant-assistant - INFO - Connecting to LiveKit room...
+2025-03-28 16:35:35,233 - livekit - INFO - livekit_ffi::server:138:livekit_ffi::server - initializing ffi server v0.12.16
+2025-03-28 16:35:35,234 - livekit - INFO - livekit_ffi::cabi:36:livekit_ffi::cabi - initializing ffi server v0.12.16
+2025-03-28 16:35:35,282 - livekit - INFO - livekit_api::signal_client::signal_stream:96:livekit_api::signal_client::signal_stream - connecting to wss://cursorquit-304ysaxl.livekit.cloud/rtc?sdk=python&protocol=15&auto_subscribe=0&adaptive_stream=0&version=0.22.0&access_token=...
+2025-03-28 16:35:35,362 - livekit - DEBUG - rustls::anchors:150:rustls::anchors - add_parsable_certificates processed 39 valid and 0 invalid certs
+2025-03-28 16:35:35,364 - livekit - DEBUG - tokio_tungstenite::tls::encryption::rustls:103:tokio_tungstenite::tls::encryption::rustls - Added 39/39 native root certificates (ignored 0)
+2025-03-28 16:35:35,365 - livekit - DEBUG - rustls::client::hs:73:rustls::client::hs - No cached session for DnsName("cursorquit-304ysaxl.livekit.cloud")
+2025-03-28 16:35:35,366 - livekit - DEBUG - rustls::client::hs:132:rustls::client::hs - Not resuming any session
+2025-03-28 16:35:35,460 - livekit - DEBUG - rustls::client::hs:615:rustls::client::hs - Using ciphersuite TLS13_AES_128_GCM_SHA256
+2025-03-28 16:35:35,462 - livekit - DEBUG - rustls::client::tls13:142:rustls::client::tls13 - Not resuming
+2025-03-28 16:35:35,464 - livekit - DEBUG - rustls::client::tls13:381:rustls::client::tls13 - TLS1.3 encrypted extensions: []
+2025-03-28 16:35:35,465 - livekit - DEBUG - rustls::client::hs:472:rustls::client::hs - ALPN protocol is None
+2025-03-28 16:35:35,625 - livekit - DEBUG - tungstenite::handshake::client:95:tungstenite::handshake::client - Client handshake done.
+2025-03-28 16:35:35,963 - portuguese-restaurant-assistant - INFO - Waiting for a participant to join...
+2025-03-28 16:35:35,964 - portuguese-restaurant-assistant - INFO - Participant joined: self-healing-git
+2025-03-28 16:35:35,965 - portuguese-restaurant-assistant - INFO - Initializing voice assistant...
+2025-03-28 16:35:38,314 - portuguese-restaurant-assistant - ERROR - Error in entrypoint: cannot import name 'generate' from 'elevenlabs' (C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\elevenlabs\__init__.py)
+2025-03-28 16:35:38,334 - portuguese-restaurant-assistant - ERROR - Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\cursorquit\agent.py", line 664, in entrypoint
+    from elevenlabs import VoiceSettings, generate, stream
+ImportError: cannot import name 'generate' from 'elevenlabs' (C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\elevenlabs\__init__.py)
+
+2025-03-28 16:35:38,337 - livekit.agents - WARNING - Running <Task finished name='job_user_entrypoint' coro=<entrypoint() done, defined at C:\Users\Utilizador\Desktop\livekit quit\cursorquit\agent.py:599> result=None> took too long: 2.38 seconds
+2025-03-28 16:35:38,339 - livekit.agents - WARNING - Running <Task finished name='job_user_entrypoint' coro=<entrypoint() done, defined at C:\Users\Utilizador\Desktop\livekit quit\cursorquit\agent.py:599> result=None> took too long: 2.38 seconds
+2025-03-28 16:36:11,697 - livekit.agents - INFO - received job request
+2025-03-28 16:36:11,876 - livekit.agents - INFO - initializing job runner
+2025-03-28 16:36:11,878 - portuguese-restaurant-assistant - INFO - Preloading VAD model...
+2025-03-28 16:36:12,537 - portuguese-restaurant-assistant - INFO - VAD model preloaded successfully
+2025-03-28 16:36:12,539 - livekit.agents - INFO - job runner initialized
+2025-03-28 16:36:12,543 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:36:12,552 - portuguese-restaurant-assistant - INFO - Starting Portuguese restaurant voice assistant for room sbx-16jzjr-cqFdy2cPHQLcW6ucxdxsnA
+2025-03-28 16:36:12,553 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:36:12,555 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:36:12,555 - portuguese-restaurant-assistant - INFO - Initialized conversation tracker for order details and transcript
+2025-03-28 16:36:12,556 - portuguese-restaurant-assistant - INFO - Setting up assistant system prompt
+2025-03-28 16:36:12,559 - portuguese-restaurant-assistant - INFO - Connecting to LiveKit room...
+2025-03-28 16:36:12,574 - livekit - INFO - livekit_ffi::server:138:livekit_ffi::server - initializing ffi server v0.12.16
+2025-03-28 16:36:12,576 - livekit - INFO - livekit_ffi::cabi:36:livekit_ffi::cabi - initializing ffi server v0.12.16
+2025-03-28 16:36:12,610 - livekit - INFO - livekit_api::signal_client::signal_stream:96:livekit_api::signal_client::signal_stream - connecting to wss://cursorquit-304ysaxl.livekit.cloud/rtc?sdk=python&protocol=15&auto_subscribe=0&adaptive_stream=0&version=0.22.0&access_token=...
+2025-03-28 16:36:12,751 - livekit - DEBUG - rustls::anchors:150:rustls::anchors - add_parsable_certificates processed 39 valid and 0 invalid certs
+2025-03-28 16:36:12,757 - livekit - DEBUG - tokio_tungstenite::tls::encryption::rustls:103:tokio_tungstenite::tls::encryption::rustls - Added 39/39 native root certificates (ignored 0)
+2025-03-28 16:36:12,763 - livekit - DEBUG - rustls::client::hs:73:rustls::client::hs - No cached session for DnsName("cursorquit-304ysaxl.livekit.cloud")
+2025-03-28 16:36:12,766 - livekit - DEBUG - rustls::client::hs:132:rustls::client::hs - Not resuming any session
+2025-03-28 16:36:12,870 - livekit - DEBUG - rustls::client::hs:615:rustls::client::hs - Using ciphersuite TLS13_AES_128_GCM_SHA256
+2025-03-28 16:36:12,872 - livekit - DEBUG - rustls::client::tls13:142:rustls::client::tls13 - Not resuming
+2025-03-28 16:36:12,874 - livekit - DEBUG - rustls::client::tls13:381:rustls::client::tls13 - TLS1.3 encrypted extensions: []
+2025-03-28 16:36:12,876 - livekit - DEBUG - rustls::client::hs:472:rustls::client::hs - ALPN protocol is None
+2025-03-28 16:36:13,029 - livekit - DEBUG - tungstenite::handshake::client:95:tungstenite::handshake::client - Client handshake done.
+2025-03-28 16:36:13,384 - portuguese-restaurant-assistant - INFO - Waiting for a participant to join...
+2025-03-28 16:36:13,388 - portuguese-restaurant-assistant - INFO - Participant joined: synthetic-virtualenv
+2025-03-28 16:36:13,391 - portuguese-restaurant-assistant - INFO - Initializing voice assistant...
+2025-03-28 16:36:15,813 - portuguese-restaurant-assistant - ERROR - Error in entrypoint: cannot import name 'generate' from 'elevenlabs' (C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\elevenlabs\__init__.py)
+2025-03-28 16:36:15,822 - portuguese-restaurant-assistant - ERROR - Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\cursorquit\agent.py", line 664, in entrypoint
+    from elevenlabs import VoiceSettings, generate, stream
+ImportError: cannot import name 'generate' from 'elevenlabs' (C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\elevenlabs\__init__.py)
+
+2025-03-28 16:36:15,826 - livekit.agents - WARNING - Running <Task finished name='job_user_entrypoint' coro=<entrypoint() done, defined at C:\Users\Utilizador\Desktop\livekit quit\cursorquit\agent.py:599> result=None> took too long: 2.44 seconds
+2025-03-28 16:36:15,827 - livekit.agents - WARNING - Running <Task finished name='job_user_entrypoint' coro=<entrypoint() done, defined at C:\Users\Utilizador\Desktop\livekit quit\cursorquit\agent.py:599> result=None> took too long: 2.44 seconds
+2025-03-28 16:36:26,357 - livekit.agents - DEBUG - shutting down job task
+2025-03-28 16:36:26,358 - livekit - DEBUG - tungstenite::protocol:666:tungstenite::protocol - Received close frame: Some(CloseFrame { code: Normal, reason: "" })
+2025-03-28 16:36:26,366 - livekit - DEBUG - tungstenite::protocol:683:tungstenite::protocol - Replying to close with Frame { header: FrameHeader { is_final: true, rsv1: false, rsv2: false, rsv3: false, opcode: Control(Close), mask: None }, payload: [3, 232] }
+2025-03-28 16:36:26,367 - livekit.agents - DEBUG - job exiting
+2025-03-28 16:36:26,371 - livekit.agents - DEBUG - http_session(): closing the httpclient ctx
+2025-03-28 16:36:26,372 - livekit - WARNING - livekit::rtc_engine:446:livekit::rtc_engine - received session close: "signal client closed: \"stream closed\"" UnknownReason Resume
+2025-03-28 16:36:26,372 - livekit.agents - DEBUG - http_session(): creating a new httpclient ctx
+2025-03-28 16:36:26,385 - livekit - INFO - livekit::room:1191:livekit::room - disconnected from room with reason: RoomClosed
+2025-03-28 16:36:32,259 - livekit.agents - INFO - shutting down worker
+2025-03-28 16:36:32,276 - livekit.agents - DEBUG - shutting down job task
+2025-03-28 16:36:32,297 - livekit.agents - DEBUG - job exiting
+2025-03-28 16:36:32,388 - livekit - DEBUG - tungstenite::protocol:666:tungstenite::protocol - Received close frame: Some(CloseFrame { code: Normal, reason: "" })
+2025-03-28 16:36:32,415 - livekit - INFO - livekit::room:1191:livekit::room - disconnected from room with reason: ClientInitiated
+2025-03-28 16:36:32,420 - livekit.agents - DEBUG - http_session(): closing the httpclient ctx
+2025-03-28 16:36:32,422 - livekit.agents - DEBUG - http_session(): creating a new httpclient ctx
+2025-03-28 16:39:40,305 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:39:40,365 - livekit.agents - INFO - starting worker
+2025-03-28 16:39:40,733 - livekit.agents - INFO - registered worker
+2025-03-28 16:40:06,258 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:40:06,263 - livekit.agents - DEV - Watching C:\Users\Utilizador\Desktop\livekit quit\cursorquit
+2025-03-28 16:40:09,619 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:40:09,626 - livekit.agents - INFO - starting worker
+2025-03-28 16:40:09,958 - livekit.agents - INFO - registered worker
+2025-03-28 16:40:20,690 - livekit.agents - INFO - received job request
+2025-03-28 16:40:20,747 - livekit.agents - INFO - initializing job runner
+2025-03-28 16:40:20,754 - portuguese-restaurant-assistant - INFO - Preloading VAD model...
+2025-03-28 16:40:21,254 - portuguese-restaurant-assistant - INFO - VAD model preloaded successfully
+2025-03-28 16:40:21,259 - livekit.agents - INFO - job runner initialized
+2025-03-28 16:40:21,262 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:40:21,264 - portuguese-restaurant-assistant - INFO - Starting Portuguese restaurant voice assistant for room sbx-16jzjr-RKkgV7J37mDBp3pfVWo6Yg
+2025-03-28 16:40:21,264 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:40:21,264 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:40:21,264 - portuguese-restaurant-assistant - INFO - Initialized conversation tracker for order details and transcript
+2025-03-28 16:40:21,270 - portuguese-restaurant-assistant - INFO - Setting up assistant system prompt
+2025-03-28 16:40:21,273 - portuguese-restaurant-assistant - INFO - Connecting to LiveKit room...
+2025-03-28 16:40:21,300 - livekit - INFO - livekit_ffi::server:138:livekit_ffi::server - initializing ffi server v0.12.16
+2025-03-28 16:40:21,302 - livekit - INFO - livekit_ffi::cabi:36:livekit_ffi::cabi - initializing ffi server v0.12.16
+2025-03-28 16:40:21,365 - livekit - INFO - livekit_api::signal_client::signal_stream:96:livekit_api::signal_client::signal_stream - connecting to wss://cursorquit-304ysaxl.livekit.cloud/rtc?sdk=python&protocol=15&auto_subscribe=0&adaptive_stream=0&version=0.22.0&access_token=...
+2025-03-28 16:40:21,494 - livekit - DEBUG - rustls::anchors:150:rustls::anchors - add_parsable_certificates processed 39 valid and 0 invalid certs
+2025-03-28 16:40:21,497 - livekit - DEBUG - tokio_tungstenite::tls::encryption::rustls:103:tokio_tungstenite::tls::encryption::rustls - Added 39/39 native root certificates (ignored 0)
+2025-03-28 16:40:21,499 - livekit - DEBUG - rustls::client::hs:73:rustls::client::hs - No cached session for DnsName("cursorquit-304ysaxl.livekit.cloud")
+2025-03-28 16:40:21,500 - livekit - DEBUG - rustls::client::hs:132:rustls::client::hs - Not resuming any session
+2025-03-28 16:40:21,594 - livekit - DEBUG - rustls::client::hs:615:rustls::client::hs - Using ciphersuite TLS13_AES_128_GCM_SHA256
+2025-03-28 16:40:21,594 - livekit - DEBUG - rustls::client::tls13:142:rustls::client::tls13 - Not resuming
+2025-03-28 16:40:21,594 - livekit - DEBUG - rustls::client::tls13:381:rustls::client::tls13 - TLS1.3 encrypted extensions: []
+2025-03-28 16:40:21,594 - livekit - DEBUG - rustls::client::hs:472:rustls::client::hs - ALPN protocol is None
+2025-03-28 16:40:21,762 - livekit - DEBUG - tungstenite::handshake::client:95:tungstenite::handshake::client - Client handshake done.
+2025-03-28 16:40:22,202 - portuguese-restaurant-assistant - INFO - Waiting for a participant to join...
+2025-03-28 16:40:22,205 - portuguese-restaurant-assistant - INFO - Participant joined: smart-webhook
+2025-03-28 16:40:22,205 - portuguese-restaurant-assistant - INFO - Initializing voice assistant...
+2025-03-28 16:40:22,207 - portuguese-restaurant-assistant - ERROR - Error in entrypoint: TTS.__init__() got an unexpected keyword argument 'settings'
+2025-03-28 16:40:22,211 - portuguese-restaurant-assistant - ERROR - Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\cursorquit\agent.py", line 667, in entrypoint
+    tts = TTS(
+          ^^^^
+TypeError: TTS.__init__() got an unexpected keyword argument 'settings'
+
+2025-03-28 16:41:38,238 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:41:38,242 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:41:38,265 - livekit.agents - INFO - starting worker
+2025-03-28 16:41:38,273 - livekit.agents - ERROR - Error in _read_ipc_task
+Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\aio\duplex_unix.py", line 35, in recv_bytes
+    len_bytes = await self._reader.readexactly(4)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\streams.py", line 750, in readexactly
+    raise exceptions.IncompleteReadError(incomplete, n)
+asyncio.exceptions.IncompleteReadError: 0 bytes read on a total of 4 expected bytes
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\log.py", line 16, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\cli\watcher.py", line 120, in _read_ipc_task
+    msg = await channel.arecv_message(self._pch, proto.IPC_MESSAGES)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\ipc\channel.py", line 47, in arecv_message
+    return _read_message(await dplx.recv_bytes(), messages)
+                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Utilizador\Desktop\livekit quit\venv\Lib\site-packages\livekit\agents\utils\aio\duplex_unix.py", line 43, in recv_bytes
+    raise DuplexClosed()
+livekit.agents.utils.aio.duplex_unix.DuplexClosed
+2025-03-28 16:41:38,631 - livekit.agents - INFO - registered worker
+2025-03-28 16:41:51,126 - livekit.agents - INFO - received job request
+2025-03-28 16:41:51,223 - livekit.agents - INFO - initializing job runner
+2025-03-28 16:41:51,223 - portuguese-restaurant-assistant - INFO - Preloading VAD model...
+2025-03-28 16:41:51,959 - portuguese-restaurant-assistant - INFO - VAD model preloaded successfully
+2025-03-28 16:41:51,959 - livekit.agents - INFO - job runner initialized
+2025-03-28 16:41:52,398 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:41:52,398 - portuguese-restaurant-assistant - INFO - Starting Portuguese restaurant voice assistant for room sbx-16jzjr-RKkgV7J37mDBp3pfVWo6Yg
+2025-03-28 16:41:52,398 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:41:52,398 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:41:52,406 - portuguese-restaurant-assistant - INFO - Initialized conversation tracker for order details and transcript
+2025-03-28 16:41:52,406 - portuguese-restaurant-assistant - INFO - Setting up assistant system prompt
+2025-03-28 16:41:52,406 - portuguese-restaurant-assistant - INFO - Connecting to LiveKit room...
+2025-03-28 16:41:52,430 - livekit - INFO - livekit_ffi::server:138:livekit_ffi::server - initializing ffi server v0.12.16
+2025-03-28 16:41:52,438 - livekit - INFO - livekit_ffi::cabi:36:livekit_ffi::cabi - initializing ffi server v0.12.16
+2025-03-28 16:41:52,487 - livekit - INFO - livekit_api::signal_client::signal_stream:96:livekit_api::signal_client::signal_stream - connecting to wss://cursorquit-304ysaxl.livekit.cloud/rtc?sdk=python&protocol=15&auto_subscribe=0&adaptive_stream=0&version=0.22.0&access_token=...
+2025-03-28 16:41:52,623 - livekit - DEBUG - rustls::anchors:150:rustls::anchors - add_parsable_certificates processed 39 valid and 0 invalid certs
+2025-03-28 16:41:52,625 - livekit - DEBUG - tokio_tungstenite::tls::encryption::rustls:103:tokio_tungstenite::tls::encryption::rustls - Added 39/39 native root certificates (ignored 0)
+2025-03-28 16:41:52,626 - livekit - DEBUG - rustls::client::hs:73:rustls::client::hs - No cached session for DnsName("cursorquit-304ysaxl.livekit.cloud")
+2025-03-28 16:41:52,627 - livekit - DEBUG - rustls::client::hs:132:rustls::client::hs - Not resuming any session
+2025-03-28 16:41:52,717 - livekit - DEBUG - rustls::client::hs:615:rustls::client::hs - Using ciphersuite TLS13_AES_128_GCM_SHA256
+2025-03-28 16:41:52,718 - livekit - DEBUG - rustls::client::tls13:142:rustls::client::tls13 - Not resuming
+2025-03-28 16:41:52,719 - livekit - DEBUG - rustls::client::tls13:381:rustls::client::tls13 - TLS1.3 encrypted extensions: []
+2025-03-28 16:41:52,722 - livekit - DEBUG - rustls::client::hs:472:rustls::client::hs - ALPN protocol is None
+2025-03-28 16:41:52,881 - livekit - DEBUG - tungstenite::handshake::client:95:tungstenite::handshake::client - Client handshake done.
+2025-03-28 16:41:53,288 - portuguese-restaurant-assistant - INFO - Waiting for a participant to join...
+2025-03-28 16:41:53,290 - portuguese-restaurant-assistant - INFO - Participant joined: smart-webhook
+2025-03-28 16:41:53,291 - portuguese-restaurant-assistant - INFO - Initializing voice assistant...
+2025-03-28 16:41:53,292 - portuguese-restaurant-assistant - INFO - Using ElevenLabs TTS with Ana voice
+2025-03-28 16:41:53,970 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:41:53,976 - livekit.agents - DEV - Watching C:\Users\Utilizador\Desktop\livekit quit\cursorquit
+2025-03-28 16:41:54,152 - portuguese-restaurant-assistant - INFO - Starting voice assistant...
+2025-03-28 16:41:54,223 - livekit.agents - DEBUG - http_session(): creating a new httpclient ctx
+2025-03-28 16:41:55,384 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=3e679de39306, ttfb=0.4686961998231709, audio_duration=3.53
+2025-03-28 16:41:55,663 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-28 16:41:59,126 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:41:59,150 - livekit.agents - INFO - starting worker
+2025-03-28 16:41:59,199 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:41:59,202 - portuguese-restaurant-assistant - INFO - Agent speech committed: Boa tarde! Churrascaria Quitanda, em que posso ajudar?
+2025-03-28 16:41:59,203 - portuguese-restaurant-assistant - INFO - Added assistant message to transcript: Boa tarde! Churrascaria Quitanda, em que posso ajudar?
+2025-03-28 16:41:59,206 - portuguese-restaurant-assistant - INFO - Extracted customer name: em que
+2025-03-28 16:41:59,211 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-28 16:41:59,460 - livekit.agents - INFO - registered worker
+2025-03-28 16:42:22,187 - livekit.agents - INFO - shutting down worker
+2025-03-28 16:42:27,539 - livekit.agents - INFO - shutting down worker
+2025-03-28 16:42:28,665 - livekit.agents - DEBUG - shutting down job task
+2025-03-28 16:42:28,669 - livekit - DEBUG - tungstenite::protocol:666:tungstenite::protocol - Received close frame: Some(CloseFrame { code: Normal, reason: "" })
+2025-03-28 16:42:28,676 - livekit - DEBUG - tungstenite::protocol:683:tungstenite::protocol - Replying to close with Frame { header: FrameHeader { is_final: true, rsv1: false, rsv2: false, rsv3: false, opcode: Control(Close), mask: None }, payload: [3, 232] }
+2025-03-28 16:42:28,678 - livekit - WARNING - livekit::rtc_engine:446:livekit::rtc_engine - received session close: "signal client closed: \"stream closed\"" UnknownReason Resume
+2025-03-28 16:42:28,681 - livekit.agents - DEBUG - job exiting
+2025-03-28 16:42:28,687 - portuguese-restaurant-assistant - INFO - Usage summary: UsageSummary(llm_prompt_tokens=0, llm_completion_tokens=0, tts_characters_count=54, stt_audio_duration=0.0)
+2025-03-28 16:42:28,688 - portuguese-restaurant-assistant - INFO - Sending conversation transcript to Make.com webhook
+2025-03-28 16:42:28,690 - portuguese-restaurant-assistant - INFO - Sending transcript to Make.com webhook: https://hook.eu2.make.com/bsguyya5mpx4j3nnq715lmetg3jer76k
+2025-03-28 16:42:28,750 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): hook.eu2.make.com:443
+2025-03-28 16:42:29,197 - urllib3.connectionpool - DEBUG - https://hook.eu2.make.com:443 "POST /bsguyya5mpx4j3nnq715lmetg3jer76k HTTP/1.1" 200 8
+2025-03-28 16:42:29,205 - portuguese-restaurant-assistant - INFO - Transcript successfully sent to Make.com
+2025-03-28 16:42:29,209 - portuguese-restaurant-assistant - INFO - Transcript sent: True
+2025-03-28 16:42:29,212 - livekit.agents - DEBUG - http_session(): closing the httpclient ctx
+2025-03-28 16:42:38,829 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:42:38,835 - livekit.agents - DEV - Watching C:\Users\Utilizador\Desktop\livekit quit\cursorquit
+2025-03-28 16:42:44,381 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:42:44,392 - livekit.agents - INFO - starting worker
+2025-03-28 16:42:44,725 - livekit.agents - INFO - registered worker
+2025-03-28 16:43:00,442 - livekit.agents - INFO - received job request
+2025-03-28 16:43:00,511 - livekit.agents - INFO - initializing job runner
+2025-03-28 16:43:00,517 - portuguese-restaurant-assistant - INFO - Preloading VAD model...
+2025-03-28 16:43:01,125 - portuguese-restaurant-assistant - INFO - VAD model preloaded successfully
+2025-03-28 16:43:01,126 - livekit.agents - INFO - job runner initialized
+2025-03-28 16:43:01,128 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-28 16:43:01,131 - portuguese-restaurant-assistant - INFO - Starting Portuguese restaurant voice assistant for room sbx-16jzjr-NsmbwWK6S2KFYTWUD6pChd
+2025-03-28 16:43:01,132 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:43:01,132 - portuguese-restaurant-assistant - INFO - Initialized simplified interaction tracker
+2025-03-28 16:43:01,133 - portuguese-restaurant-assistant - INFO - Initialized conversation tracker for order details and transcript
+2025-03-28 16:43:01,135 - portuguese-restaurant-assistant - INFO - Setting up assistant system prompt
+2025-03-28 16:43:01,135 - portuguese-restaurant-assistant - INFO - Connecting to LiveKit room...
+2025-03-28 16:43:01,142 - livekit - INFO - livekit_ffi::server:138:livekit_ffi::server - initializing ffi server v0.12.16
+2025-03-28 16:43:01,144 - livekit - INFO - livekit_ffi::cabi:36:livekit_ffi::cabi - initializing ffi server v0.12.16
+2025-03-28 16:43:01,170 - livekit - INFO - livekit_api::signal_client::signal_stream:96:livekit_api::signal_client::signal_stream - connecting to wss://cursorquit-304ysaxl.livekit.cloud/rtc?sdk=python&protocol=15&auto_subscribe=0&adaptive_stream=0&version=0.22.0&access_token=...
+2025-03-28 16:43:01,253 - livekit - DEBUG - rustls::anchors:150:rustls::anchors - add_parsable_certificates processed 39 valid and 0 invalid certs
+2025-03-28 16:43:01,254 - livekit - DEBUG - tokio_tungstenite::tls::encryption::rustls:103:tokio_tungstenite::tls::encryption::rustls - Added 39/39 native root certificates (ignored 0)
+2025-03-28 16:43:01,255 - livekit - DEBUG - rustls::client::hs:73:rustls::client::hs - No cached session for DnsName("cursorquit-304ysaxl.livekit.cloud")
+2025-03-28 16:43:01,257 - livekit - DEBUG - rustls::client::hs:132:rustls::client::hs - Not resuming any session
+2025-03-28 16:43:01,364 - livekit - DEBUG - rustls::client::hs:615:rustls::client::hs - Using ciphersuite TLS13_AES_128_GCM_SHA256
+2025-03-28 16:43:01,365 - livekit - DEBUG - rustls::client::tls13:142:rustls::client::tls13 - Not resuming
+2025-03-28 16:43:01,366 - livekit - DEBUG - rustls::client::tls13:381:rustls::client::tls13 - TLS1.3 encrypted extensions: []
+2025-03-28 16:43:01,367 - livekit - DEBUG - rustls::client::hs:472:rustls::client::hs - ALPN protocol is None
+2025-03-28 16:43:01,559 - livekit - DEBUG - tungstenite::handshake::client:95:tungstenite::handshake::client - Client handshake done.
+2025-03-28 16:43:01,941 - portuguese-restaurant-assistant - INFO - Waiting for a participant to join...
+2025-03-28 16:43:01,942 - portuguese-restaurant-assistant - INFO - Participant joined: immutable-container
+2025-03-28 16:43:01,943 - portuguese-restaurant-assistant - INFO - Initializing voice assistant...
+2025-03-28 16:43:01,943 - portuguese-restaurant-assistant - INFO - Using ElevenLabs TTS with Ana voice
+2025-03-28 16:43:02,713 - portuguese-restaurant-assistant - INFO - Starting voice assistant...
+2025-03-28 16:43:02,805 - livekit.agents - DEBUG - http_session(): creating a new httpclient ctx
+2025-03-28 16:43:03,491 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=9b88cc1aec00, ttfb=0.4833539999090135, audio_duration=3.53
+2025-03-28 16:43:03,520 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-28 16:43:07,041 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:43:07,043 - portuguese-restaurant-assistant - INFO - Agent speech committed: Boa tarde! Churrascaria Quitanda, em que posso ajudar?
+2025-03-28 16:43:07,044 - portuguese-restaurant-assistant - INFO - Added assistant message to transcript: Boa tarde! Churrascaria Quitanda, em que posso ajudar?
+2025-03-28 16:43:07,047 - portuguese-restaurant-assistant - INFO - Extracted customer name: em que
+2025-03-28 16:43:07,050 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-28 16:43:24,960 - livekit.plugins.silero - WARNING - inference is slower than realtime
+2025-03-28 16:43:27,965 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:43:27,967 - livekit.agents.pipeline - DEBUG - validated agent reply
+2025-03-28 16:43:27,967 - livekit.agents - INFO - Pipeline EOU metrics: sequence_id=71b775e8cb71, end_of_utterance_delay=0.79, transcription_delay=0.79
+2025-03-28 16:43:29,393 - livekit.agents - INFO - Pipeline LLM metrics: sequence_id=71b775e8cb71, ttft=0.94, input_tokens=432, output_tokens=33, tokens_per_second=23.20
+2025-03-28 16:43:29,676 - livekit.agents - INFO - Pipeline STT metrics: duration=5.06, audio_duration=5.00
+2025-03-28 16:43:30,594 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-28 16:43:30,783 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=71b775e8cb71, ttfb=1.6596214999444783, audio_duration=9.95
+2025-03-28 16:43:32,272 - portuguese-restaurant-assistant - INFO - User speech committed: quero frango por favor.
+2025-03-28 16:43:32,277 - portuguese-restaurant-assistant - INFO - Added user message to transcript: quero frango por favor.
+2025-03-28 16:43:34,767 - livekit.agents - INFO - Pipeline STT metrics: duration=10.15, audio_duration=5.10
+2025-03-28 16:43:39,859 - livekit.agents - INFO - Pipeline STT metrics: duration=15.24, audio_duration=5.10
+2025-03-28 16:43:40,550 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:43:40,552 - portuguese-restaurant-assistant - INFO - Agent speech committed: Certamente! Temos Frango do Churrasco no nosso menu. Gostaria de acompanhar com batatas fritas, arroz, salada ou broa?
+2025-03-28 16:43:40,554 - portuguese-restaurant-assistant - INFO - Added assistant message to transcript: Certamente! Temos Frango do Churrasco no nosso menu. Gostaria de acompanhar com batatas fritas, arroz, salada ou broa?
+2025-03-28 16:43:40,556 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-28 16:43:44,950 - livekit.agents - INFO - Pipeline STT metrics: duration=20.33, audio_duration=5.05
+2025-03-28 16:43:45,125 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:43:45,432 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:43:46,469 - livekit.agents.pipeline - DEBUG - validated agent reply
+2025-03-28 16:43:46,470 - livekit.agents - INFO - Pipeline EOU metrics: sequence_id=5731714f446e, end_of_utterance_delay=0.19, transcription_delay=0.00
+2025-03-28 16:43:47,012 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:43:47,207 - livekit.agents.pipeline - DEBUG - agent interrupted
+2025-03-28 16:43:47,209 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:43:47,212 - livekit.agents - INFO - Pipeline LLM metrics: sequence_id=5731714f446e, ttft=0.45, input_tokens=0, output_tokens=0, tokens_per_second=0.00
+2025-03-28 16:43:49,288 - livekit.agents.pipeline - DEBUG - validated agent reply
+2025-03-28 16:43:49,290 - livekit.agents - INFO - Pipeline EOU metrics: sequence_id=b6e1d7cdeb52, end_of_utterance_delay=0.19, transcription_delay=0.00
+2025-03-28 16:43:50,029 - livekit.agents - INFO - Pipeline STT metrics: duration=25.41, audio_duration=5.10
+2025-03-28 16:43:50,217 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:43:50,218 - livekit.agents.pipeline - DEBUG - agent interrupted
+2025-03-28 16:43:50,219 - livekit.agents.pipeline - DEBUG - validated agent reply
+2025-03-28 16:43:50,220 - livekit.agents - INFO - Pipeline EOU metrics: sequence_id=179e0f799090, end_of_utterance_delay=1.12, transcription_delay=1.12
+2025-03-28 16:43:50,221 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:43:50,247 - livekit.agents - INFO - Pipeline LLM metrics: sequence_id=b6e1d7cdeb52, ttft=0.76, input_tokens=0, output_tokens=0, tokens_per_second=0.00
+2025-03-28 16:43:52,157 - livekit.agents - INFO - Pipeline LLM metrics: sequence_id=179e0f799090, ttft=0.61, input_tokens=499, output_tokens=49, tokens_per_second=25.32
+2025-03-28 16:43:52,306 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-28 16:43:53,656 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=179e0f799090, ttfb=1.2760989000089467, audio_duration=12.88
+2025-03-28 16:43:53,996 - portuguese-restaurant-assistant - INFO - User speech committed: dose ser, portanto, frango, uma batata, e uma salada mas quero o frango com picante por favor.
+2025-03-28 16:43:53,998 - portuguese-restaurant-assistant - INFO - Added user message to transcript: dose ser, portanto, frango, uma batata, e uma salada mas quero o frango com picante por favor.
+2025-03-28 16:43:55,119 - livekit.agents - INFO - Pipeline STT metrics: duration=30.50, audio_duration=5.10
+2025-03-28 16:44:00,209 - livekit.agents - INFO - Pipeline STT metrics: duration=35.59, audio_duration=5.10
+2025-03-28 16:44:05,193 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:44:05,198 - portuguese-restaurant-assistant - INFO - Agent speech committed: Peço desculpa, mas não conseguimos preparar o frango com picante, apenas a nossa versão padrão do Frango do Churrasco. A dose inclui batatas fritas e salada. Posso registar o pedido assim?
+2025-03-28 16:44:05,202 - portuguese-restaurant-assistant - INFO - Added assistant message to transcript: Peço desculpa, mas não conseguimos preparar o frango com picante, apenas a nossa versão padrão do Frango do Churrasco. A dose inclui batatas fritas e salada. Posso registar o pedido assim?
+2025-03-28 16:44:05,207 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-28 16:44:05,296 - livekit.agents - INFO - Pipeline STT metrics: duration=40.68, audio_duration=5.05
+2025-03-28 16:44:07,670 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:44:07,676 - livekit.agents.pipeline - DEBUG - validated agent reply
+2025-03-28 16:44:07,679 - livekit.agents - INFO - Pipeline EOU metrics: sequence_id=c2246ea6038a, end_of_utterance_delay=0.57, transcription_delay=0.56
+2025-03-28 16:44:08,902 - livekit.agents - INFO - Pipeline LLM metrics: sequence_id=c2246ea6038a, ttft=0.40, input_tokens=563, output_tokens=45, tokens_per_second=37.15
+2025-03-28 16:44:09,865 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-28 16:44:09,993 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=c2246ea6038a, ttfb=1.6920380999799818, audio_duration=12.67
+2025-03-28 16:44:10,377 - livekit.agents - INFO - Pipeline STT metrics: duration=45.76, audio_duration=5.10
+2025-03-28 16:44:11,498 - portuguese-restaurant-assistant - INFO - User speech committed: sim, pode ser, pode ser.
+2025-03-28 16:44:11,502 - portuguese-restaurant-assistant - INFO - Added user message to transcript: sim, pode ser, pode ser.
+2025-03-28 16:44:15,468 - livekit.agents - INFO - Pipeline STT metrics: duration=50.85, audio_duration=5.10
+2025-03-28 16:44:20,558 - livekit.agents - INFO - Pipeline STT metrics: duration=55.94, audio_duration=5.10
+2025-03-28 16:44:22,530 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:44:22,532 - portuguese-restaurant-assistant - INFO - Agent speech committed: Perfeito, ficou registado: uma dose de Frango do Churrasco com batatas fritas e salada. A que horas pretende fazer o levantamento? E o nome para a encomenda, por favor.
+2025-03-28 16:44:22,533 - portuguese-restaurant-assistant - INFO - Added assistant message to transcript: Perfeito, ficou registado: uma dose de Frango do Churrasco com batatas fritas e salada. A que horas pretende fazer o levantamento? E o nome para a encomenda, por favor.
+2025-03-28 16:44:22,534 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-28 16:44:25,646 - livekit.agents - INFO - Pipeline STT metrics: duration=61.03, audio_duration=5.05
+2025-03-28 16:44:27,697 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:44:27,731 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:44:28,908 - livekit.agents.pipeline - DEBUG - validated agent reply
+2025-03-28 16:44:28,911 - livekit.agents - INFO - Pipeline EOU metrics: sequence_id=714711e30bc0, end_of_utterance_delay=0.20, transcription_delay=0.00
+2025-03-28 16:44:29,285 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:44:29,287 - livekit.agents.pipeline - DEBUG - agent interrupted
+2025-03-28 16:44:29,291 - livekit.agents.pipeline - DEBUG - validated agent reply
+2025-03-28 16:44:29,295 - livekit.agents - INFO - Pipeline EOU metrics: sequence_id=2aae2bdd683e, end_of_utterance_delay=0.59, transcription_delay=0.58
+2025-03-28 16:44:29,302 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:44:29,345 - livekit.agents - INFO - Pipeline LLM metrics: sequence_id=714711e30bc0, ttft=-1.00, input_tokens=0, output_tokens=0, tokens_per_second=0.00
+2025-03-28 16:44:30,736 - livekit.agents - INFO - Pipeline STT metrics: duration=66.12, audio_duration=5.10
+2025-03-28 16:44:31,147 - livekit.agents - INFO - Pipeline LLM metrics: sequence_id=2aae2bdd683e, ttft=0.92, input_tokens=630, output_tokens=28, tokens_per_second=15.21
+2025-03-28 16:44:31,892 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-28 16:44:32,014 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=2aae2bdd683e, ttfb=1.4621119000948966, audio_duration=7.94
+2025-03-28 16:44:33,466 - portuguese-restaurant-assistant - INFO - User speech committed: pode ser em nome de nuno, queira, para a a tarde.
+2025-03-28 16:44:33,471 - portuguese-restaurant-assistant - INFO - Added user message to transcript: pode ser em nome de nuno, queira, para a a tarde.
+2025-03-28 16:44:35,818 - livekit.agents - INFO - Pipeline STT metrics: duration=71.20, audio_duration=5.10
+2025-03-28 16:44:38,918 - livekit.agents.pipeline - DEBUG - agent interrupted
+2025-03-28 16:44:38,925 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:44:38,928 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-28 16:44:40,000 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:44:40,908 - livekit.agents - INFO - Pipeline STT metrics: duration=76.29, audio_duration=5.10
+2025-03-28 16:44:41,098 - livekit.agents.pipeline - DEBUG - validated agent reply
+2025-03-28 16:44:41,099 - livekit.agents - INFO - Pipeline EOU metrics: sequence_id=7d1c6afe351c, end_of_utterance_delay=0.19, transcription_delay=0.00
+2025-03-28 16:44:41,624 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:44:41,625 - livekit.agents.pipeline - DEBUG - agent interrupted
+2025-03-28 16:44:41,626 - livekit.agents.pipeline - DEBUG - validated agent reply
+2025-03-28 16:44:41,627 - livekit.agents - INFO - Pipeline EOU metrics: sequence_id=d98dc740c27b, end_of_utterance_delay=0.72, transcription_delay=0.72
+2025-03-28 16:44:41,629 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:44:41,659 - livekit.agents - INFO - Pipeline LLM metrics: sequence_id=7d1c6afe351c, ttft=0.43, input_tokens=0, output_tokens=0, tokens_per_second=0.00
+2025-03-28 16:44:42,519 - livekit.agents - INFO - Pipeline LLM metrics: sequence_id=d98dc740c27b, ttft=0.47, input_tokens=673, output_tokens=27, tokens_per_second=30.42
+2025-03-28 16:44:42,935 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-28 16:44:43,350 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=d98dc740c27b, ttfb=0.5667154002003372, audio_duration=7.29
+2025-03-28 16:44:44,460 - portuguese-restaurant-assistant - INFO - User speech committed: não não não não. para às cinco da tarde.
+2025-03-28 16:44:44,468 - portuguese-restaurant-assistant - INFO - Added user message to transcript: não não não não. para às cinco da tarde.
+2025-03-28 16:44:45,999 - livekit.agents - INFO - Pipeline STT metrics: duration=81.38, audio_duration=5.05
+2025-03-28 16:44:49,544 - livekit.agents.pipeline - DEBUG - received user transcript
+2025-03-28 16:44:49,546 - livekit.agents.pipeline - DEBUG - agent interrupted
+2025-03-28 16:44:49,547 - livekit.agents.pipeline - DEBUG - validated agent reply
+2025-03-28 16:44:49,550 - livekit.agents - INFO - Pipeline EOU metrics: sequence_id=833fde3166ab, end_of_utterance_delay=0.77, transcription_delay=0.76
+2025-03-28 16:44:49,592 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:44:49,594 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-28 16:44:50,101 - livekit.agents - INFO - Pipeline LLM metrics: sequence_id=833fde3166ab, ttft=0.42, input_tokens=705, output_tokens=7, tokens_per_second=12.79
+2025-03-28 16:44:50,520 - livekit.agents.pipeline - DEBUG - speech playout started
+2025-03-28 16:44:50,620 - livekit.agents - INFO - Pipeline TTS metrics: sequence_id=833fde3166ab, ttfb=0.5314810001291335, audio_duration=2.14
+2025-03-28 16:44:51,089 - livekit.agents - INFO - Pipeline STT metrics: duration=86.47, audio_duration=5.10
+2025-03-28 16:44:52,217 - portuguese-restaurant-assistant - INFO - User speech committed: obrigado.
+2025-03-28 16:44:52,220 - portuguese-restaurant-assistant - INFO - Added user message to transcript: obrigado.
+2025-03-28 16:44:52,667 - livekit.agents.pipeline - DEBUG - speech playout finished
+2025-03-28 16:44:52,668 - portuguese-restaurant-assistant - INFO - Agent speech committed: De nada. Até logo!
+2025-03-28 16:44:52,670 - portuguese-restaurant-assistant - INFO - Added assistant message to transcript: De nada. Até logo!
+2025-03-28 16:44:52,673 - livekit.agents.pipeline - DEBUG - committed agent speech
+2025-03-28 16:44:56,169 - livekit.agents - INFO - Pipeline STT metrics: duration=91.55, audio_duration=5.10
+2025-03-28 16:45:21,463 - livekit.agents - DEBUG - shutting down job task
+2025-03-28 16:45:21,479 - livekit.agents - DEBUG - job exiting
+2025-03-28 16:45:21,479 - livekit - DEBUG - tungstenite::protocol:666:tungstenite::protocol - Received close frame: Some(CloseFrame { code: Normal, reason: "" })
+2025-03-28 16:45:21,494 - portuguese-restaurant-assistant - INFO - Usage summary: UsageSummary(llm_prompt_tokens=3502, llm_completion_tokens=189, tts_characters_count=746, stt_audio_duration=91.49999999999983)
+2025-03-28 16:45:21,494 - livekit - DEBUG - tungstenite::protocol:683:tungstenite::protocol - Replying to close with Frame { header: FrameHeader { is_final: true, rsv1: false, rsv2: false, rsv3: false, opcode: Control(Close), mask: None }, payload: [3, 232] }
+2025-03-28 16:45:21,500 - portuguese-restaurant-assistant - INFO - Sending conversation transcript to Make.com webhook
+2025-03-28 16:45:21,505 - portuguese-restaurant-assistant - INFO - Sending transcript to Make.com webhook: https://hook.eu2.make.com/bsguyya5mpx4j3nnq715lmetg3jer76k
+2025-03-28 16:45:21,527 - livekit - WARNING - livekit::rtc_engine:446:livekit::rtc_engine - received session close: "signal client closed: \"stream closed\"" UnknownReason Resume
+2025-03-28 16:45:21,569 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): hook.eu2.make.com:443
+2025-03-28 16:45:21,916 - urllib3.connectionpool - DEBUG - https://hook.eu2.make.com:443 "POST /bsguyya5mpx4j3nnq715lmetg3jer76k HTTP/1.1" 200 8
+2025-03-28 16:45:21,929 - portuguese-restaurant-assistant - INFO - Transcript successfully sent to Make.com
+2025-03-28 16:45:21,933 - portuguese-restaurant-assistant - INFO - Transcript sent: True
+2025-03-28 16:45:21,933 - livekit.agents - DEBUG - http_session(): closing the httpclient ctx

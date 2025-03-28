@@ -1,0 +1,3 @@
+2025-03-27 22:51:21,172 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-03-27 22:51:21,178 - livekit.agents - DEV - Watching C:\Users\Utilizador\Desktop\livekit quit\cursorquit
+2025-03-27 22:51:24,537 - asyncio - DEBUG - Using proactor: IocpProactor

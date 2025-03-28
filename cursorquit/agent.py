@@ -650,7 +650,7 @@ async def entrypoint(ctx: JobContext):
 
     # Check if we have the required API keys
     deepgram_key = os.environ.get("DEEPGRAM_API_KEY", "")
-    elevenlabs_key = os.getenv("ELEVENLABS_API_KEY", "")
+    elevenlabs_key = os.getenv("ELEVEN_API_KEY", "")
 
     if not deepgram_key or deepgram_key.startswith(("YOUR_", "REPLACE_")):
         logger.warning("Deepgram API key is missing or invalid")
@@ -661,42 +661,23 @@ async def entrypoint(ctx: JobContext):
 
         # Configure TTS with ElevenLabs
         if elevenlabs_key:
-            from elevenlabs import VoiceSettings, generate, stream
+            from livekit.plugins.elevenlabs import TTS, Voice
             
-            # Optimize streaming configuration
-            def stream_audio_optimized(text, voice="Ana", model="eleven_multilingual_v2"):
-                """Stream audio with optimized settings for faster processing"""
-                audio_stream = generate(
-                    text=text,
-                    voice=voice,
-                    model=model,
-                    stream=True,
-                    latency=1,  # Lower latency for faster response
-                    stability=0.4,  # Slightly less stability for faster processing
-                    similarity_boost=0.65,  # Balance voice quality and speed
-                )
-                return audio_stream
-            
-            # Configure TTS with faster settings - reduced stability for speed
-            tts = elevenlabs.TTS(
+            # Initialize ElevenLabs TTS with basic configuration
+            tts = TTS(
                 voice=Voice(
-                    id="FIEA0c5UHH9JnvWaQrXS", 
-                    name="Ana", 
-                    category="premade",
+                    id="FIEA0c5UHH9JnvWaQrXS",
+                    name="Ana",
+                    category="premade"
                 ),
-                api_key=elevenlabs_key,
-                # Add optimization parameters for faster processing
-                settings=VoiceSettings(
-                    stability=0.3,  # Further reduced for faster processing
-                    similarity_boost=0.6,  # Further reduced for faster processing
-                    style=0.0,      # Neutral style for faster processing
-                    use_speaker_boost=True  # Clearer audio
-                )
+                api_key=elevenlabs_key
             )
-            voice_message = f"Using ElevenLabs TTS with voice: Ana (optimized for speed)"
+            logger.info("Using ElevenLabs TTS with Ana voice")
         else:
-            logger.info("Using OpenAI TTS (fallback)")
-            tts = openai.TTS()
+            logger.warning("ElevenLabs API key not found, falling back to OpenAI TTS")
+            from openai import OpenAI
+            client = OpenAI()
+            tts = client.audio.speech.create
 
         # Configure STT with Deepgram - Set to European Portuguese
         stt = deepgram.STT(
