@@ -61,6 +61,8 @@ Bife do Lombo - 40€/kg
 
 * Tempo estimado: 30 a 40 minutos
 
+Molho: molho da casa; molho da guia, molho sem alho, sem molhos | Picante: Sem picante, Pouco Picante, Picante, Muito Picante
+
 ACOMPANHAMENTOS:
 1 Dose de Batata Frita - 3.75€
 1 Dose de Batata Frita Barrosa - 2.50€
@@ -102,6 +104,12 @@ Vinho Gasificado Castiço - 5.50€
 Vinho Monte Velho Tinto - 7.00€
 Vinho Eugénio de Almeida Tinto - 7.00€"""
 
+# Definir as opções de personalização de carnes como variável global
+CARNE_PERSONALIZACOES = {
+    "molhos": ["molho da casa", "molho da guia", "molho sem alho", "sem molhos"],
+    "picante": ["sem picante", "pouco picante", "picante", "muito picante"]
+}
+
 # Wine recommendations in European Portuguese
 WINE_RECOMMENDATIONS = """
 Vinhos Tintos:
@@ -132,13 +140,18 @@ Sobremesas Tradicionais:
 """
 
 # System prompt for the assistant - Updated for Quitanda
-SYSTEM_PROMPT = """És um assistente da Churrascaria Quitanda que atende encomendas takeaway. 
-Responde em português europeu, conciso e natural. Recolhe: 1) items do menu, 2) hora de levantamento, 
-3) nome do cliente. Sê formal ("o senhor"/"a senhora"). Respostas breves como numa chamada telefónica real.
+SYSTEM_PROMPT = """És um atendente da Churrascaria Quitanda que atende encomendas takeaway.
+Fala português europeu de forma rápida e direta. Respostas extremamente curtas e objetivas.
 
-IMPORTANTE: Só aceites pedidos que estejam EXATAMENTE no menu da Quitanda. Se o cliente pedir algo que não está no menu, 
-informe gentilmente que não está disponível e sugira alternativas do menu atual. Nunca aceite variações ou modificações 
-dos pratos que não estejam explicitamente listadas no menu."""
+IMPORTANTE:
+1. Só fale quando for necessário
+2. Não dê informações que não foram pedidas
+3. Apenas pergunte sobre o que é essencial para completar o pedido (molho e picante para carnes)
+4. Para carnes, pergunte "Molho?" e "Picante?" se o cliente não especificar
+5. Use apenas "Sim" ou "Certo" para confirmar pedidos
+6. Não ofereça sugestões nem explicações adicionais
+
+Só aceites pedidos que estejam EXATAMENTE no menu da Quitanda."""
 
 # Make.com webhook URL for sending transcript
 MAKE_WEBHOOK_URL = os.getenv("MAKE_WEBHOOK_URL", "https://hook.eu2.make.com/your_webhook_id_here")
@@ -279,17 +292,42 @@ class ConversationTracker:
                             except (ValueError, IndexError):
                                 pass
                     
+                    # Verificar personalizações para carnes
+                    personalizacoes = {}
+                    carnes = ["frango", "espetada", "entrecosto", "févera", "costeleta", "coelho", "costelinha", "picanha", "bife"]
+                    
+                    if any(carne in item_key for carne in carnes):
+                        # Verificar molho
+                        for molho in CARNE_PERSONALIZACOES["molhos"]:
+                            if molho in message_lower:
+                                personalizacoes["molho"] = molho
+                                break
+                        
+                        # Verificar picante
+                        for picante in CARNE_PERSONALIZACOES["picante"]:
+                            if picante in message_lower:
+                                personalizacoes["picante"] = picante
+                                break
+                    
                     # Add to order items if not already there
-                    item_entry = {"item": item_name, "quantity": quantity}
+                    item_entry = {
+                        "item": item_name, 
+                        "quantity": quantity,
+                        "personalizacoes": personalizacoes
+                    }
+                    
                     if not any(existing["item"] == item_name for existing in self.order_details["items"]):
                         self.order_details["items"].append(item_entry)
-                        logger.info(f"Added item to order: {quantity}x {item_name}")
+                        logger.info(f"Added item to order: {quantity}x {item_name} with personalizacoes: {personalizacoes}")
                     else:
                         # Update quantity if item exists
                         for existing in self.order_details["items"]:
                             if existing["item"] == item_name:
                                 existing["quantity"] = quantity
-                                logger.info(f"Updated item quantity: {quantity}x {item_name}")
+                                # Atualizar personalizações se houver
+                                if personalizacoes:
+                                    existing["personalizacoes"] = personalizacoes
+                                logger.info(f"Updated item quantity: {quantity}x {item_name} with personalizacoes: {personalizacoes}")
         
         # Also check for mentions of portions (meia dose, uma dose)
         portion_patterns = [
@@ -316,12 +354,36 @@ class ConversationTracker:
                             full_item = item_name
                             
                         # Add to order items
-                        item_entry = {"item": full_item, "quantity": 1}
+                        item_entry = {"item": full_item, "quantity": 1, "personalizacoes": {}}
                         if not any(existing["item"] == full_item for existing in self.order_details["items"]):
                             self.order_details["items"].append(item_entry)
                             logger.info(f"Added portion item to order: {full_item}")
                         break
-    
+        
+        # Verificar apenas menções de personalizações (sem ordem específica)
+        for item in self.order_details["items"]:
+            carnes = ["Frango", "Espetada", "Entrecosto", "Févera", "Costeleta", "Coelho", "Costelinha", "Picanha", "Bife"]
+            if any(carne in item["item"] for carne in carnes):
+                # Verificar molho se ainda não está definido
+                if not item.get("personalizacoes") or "molho" not in item.get("personalizacoes", {}):
+                    for molho in CARNE_PERSONALIZACOES["molhos"]:
+                        if molho in message_lower:
+                            if "personalizacoes" not in item:
+                                item["personalizacoes"] = {}
+                            item["personalizacoes"]["molho"] = molho
+                            logger.info(f"Adicionado molho {molho} para {item['item']}")
+                            break
+                
+                # Verificar picante se ainda não está definido
+                if not item.get("personalizacoes") or "picante" not in item.get("personalizacoes", {}):
+                    for picante in CARNE_PERSONALIZACOES["picante"]:
+                        if picante in message_lower:
+                            if "personalizacoes" not in item:
+                                item["personalizacoes"] = {}
+                            item["personalizacoes"]["picante"] = picante
+                            logger.info(f"Adicionado picante {picante} para {item['item']}")
+                            break
+
     def get_transcript(self):
         return self.transcript
     
@@ -333,7 +395,20 @@ class ConversationTracker:
         summary = "Resumo do pedido:\n"
         
         for item in self.order_details["items"]:
-            summary += f"- {item['quantity']}x {item['item']}\n"
+            item_desc = f"- {item['quantity']}x {item['item']}"
+            
+            # Adicionar personalizações se existirem
+            if "personalizacoes" in item and item["personalizacoes"]:
+                personalizacoes = []
+                if "molho" in item["personalizacoes"]:
+                    personalizacoes.append(item["personalizacoes"]["molho"])
+                if "picante" in item["personalizacoes"]:
+                    personalizacoes.append(item["personalizacoes"]["picante"])
+                
+                if personalizacoes:
+                    item_desc += f" ({', '.join(personalizacoes)})"
+                    
+            summary += item_desc + "\n"
         
         if self.order_details["pickup_time"]:
             summary += f"\nHorário de levantamento: {self.order_details['pickup_time']}"
@@ -536,25 +611,25 @@ def elaborate_response(text, context=None):
 # Common pre-generated responses for faster interaction
 COMMON_RESPONSES = {
     "greeting": {
-        "morning": "Bom dia! Churrascaria Quitanda, em que posso ajudar?",
-        "afternoon": "Boa tarde! Churrascaria Quitanda, em que posso ajudar?",
-        "evening": "Boa noite! Churrascaria Quitanda, em que posso ajudar?"
+        "morning": "Quitanda, bom dia.",
+        "afternoon": "Quitanda, boa tarde.",
+        "evening": "Quitanda, boa noite."
     },
-    "menu_request": "Aqui está o nosso menu principal. O que gostaria de encomendar?",
-    "confirmation": "Perfeito! Vou registar o seu pedido.",
-    "thanks": "Muito obrigado pela sua encomenda.",
-    "wait": ["Um momento...", "Já verifico...", "Vou ver isso...", "Um instante por favor..."],
-    "acknowledgment": ["Entendido.", "Compreendo.", "Certo.", "Claro.", "Sim."],
-    "not_available": "Peço desculpa, mas esse item não está disponível no nosso menu atual. Posso sugerir algumas alternativas do nosso cardápio?",
-    "item_not_found": "Peço desculpa, mas não encontro esse item no nosso menu. Gostaria que eu lesse o menu novamente?"
+    "menu_request": "Menu:",
+    "confirmation": "Registado.",
+    "thanks": "Obrigado.",
+    "wait": ["Um momento.", "Já vejo.", "Espere.", "Aguarde."],
+    "acknowledgment": ["Sim.", "Certo.", "Entendido."],
+    "not_available": "Esse item não está disponível.",
+    "item_not_found": "Não encontro esse item no menu."
 }
 
-# Custom say function - simplified for faster performance 
+# Custom say function - simplified for maximum speed 
 async def adaptive_say(assistant, text, allow_interruptions=True, context=None):
     # Use pre-generated responses when possible for immediate response
     if context in COMMON_RESPONSES and isinstance(COMMON_RESPONSES[context], str):
         logger.info(f"Using pre-generated response for context: {context}")
-        await assistant.say(COMMON_RESPONSES[context], allow_interruptions=allow_interruptions)
+        await assistant.say(COMMON_RESPONSES[context], allow_interruptions=True)
         return
     elif context == "greeting":
         # Determine time of day for appropriate greeting
@@ -565,36 +640,17 @@ async def adaptive_say(assistant, text, allow_interruptions=True, context=None):
             greeting_type = "afternoon"
         else:
             greeting_type = "evening"
-        await assistant.say(COMMON_RESPONSES["greeting"][greeting_type], allow_interruptions=allow_interruptions)
+        await assistant.say(COMMON_RESPONSES["greeting"][greeting_type], allow_interruptions=True)
+        return
+    elif context == "wait" or context == "acknowledgment":
+        # Randomly select from multiple options for variety
+        options = COMMON_RESPONSES[context]
+        selected = random.choice(options)
+        await assistant.say(selected, allow_interruptions=True)
         return
     
-    # For critical/menu responses only, handle in chunks to appear faster
-    if context in ["menu_request", "order_summary"] and len(text) > 80:
-        # Split on periods and send chunks
-        sentences = text.split('.')
-        chunks = []
-        current = ""
-        
-        # Create chunks of reasonable size
-        for sentence in sentences:
-            if sentence.strip():
-                if len(current) + len(sentence) < 80:
-                    current += sentence + "."
-                else:
-                    if current:
-                        chunks.append(current)
-                    current = sentence + "."
-        
-        if current:
-            chunks.append(current)
-            
-        # Send chunks sequentially
-        for chunk in chunks:
-            await assistant.say(chunk, allow_interruptions=True)
-        return
-    
-    # For all other responses, send directly without content adaptation
-    await assistant.say(text, allow_interruptions=allow_interruptions)
+    # For regular text responses, send directly
+    await assistant.say(text, allow_interruptions=True)
 
 async def entrypoint(ctx: JobContext):
     """Main entrypoint for the agent"""
@@ -620,22 +676,22 @@ async def entrypoint(ctx: JobContext):
     # Add examples of European Portuguese responses
     initial_ctx = initial_ctx.append(
         role="system",
-        text="""Exemplos de respostas em português europeu para a Churrascaria Quitanda:
+        text="""Exemplos de respostas em português europeu como falarias se fosses um funcionário real de uma Churrascaria em Portugal:
         
         Para pedido de menu:
-        "Aqui está o nosso menu. Temos pratos de carne como Frango do Churrasco, Espetadas, Entrecosto, e também Bacalhau assado na brasa. Como acompanhamento, temos batatas fritas, arroz, saladas e broa. O que gostaria de encomendar?"
+        "Ora bem, temos cá no nosso menu... Olhe, temos Frango do Churrasco, as nossas Espetadas que são muito boas, Entrecosto, e também temos Bacalhau assado na brasa, que é uma especialidade da casa. Pra acompanhar temos batatas fritas, arroz, saladas e a nossa broa caseira. O que lhe apetece hoje?"
         
         Para pedido não disponível:
-        "Peço desculpa, mas esse item não está disponível no nosso menu atual. Posso sugerir algumas alternativas? Por exemplo, temos o Frango do Churrasco ou a Espetada de Guia."
+        "Ai, olhe, peço desculpa mas isso não temos hoje. Posso sugerir-lhe outra coisa? Temos o Frango do Churrasco que está mesmo bom hoje, ou então a Espetada de Guia que é muito procurada."
         
         Para pedido de bebidas:
-        "Temos refrigerantes em garrafa de 1L e 1.5L, e uma seleção de vinhos portugueses. Gostaria de conhecer as nossas opções?"
+        "Temos refrigerantes, tá? Em garrafa de litro e litro e meio. E temos também uns vinhos portugueses muito bons. Quer que lhe diga quais são?"
         
         Para confirmação de pedido:
-        "Perfeito! Vou registar o seu pedido. Para confirmar, o senhor/a senhora pediu [item] com [acompanhamento]. Está correto?"
+        "Então, deixe-me ver se percebi bem... O senhor pediu [item] com [acompanhamento], não foi? Está tudo certo?"
         
         Para despedida:
-        "Muito obrigado pela sua encomenda. Esperamos servi-lo novamente em breve. Até à próxima!"
+        "Muito obrigado pela sua encomenda, pá. Fica à espera do senhor. Até já, boa tarde!"
         """
     )
 
@@ -745,58 +801,22 @@ async def entrypoint(ctx: JobContext):
                     logger.info("Ignoring empty speech")
                     return
                 
-                # Check if this is just noise or empty speech
-                if interaction_tracker.check_for_empty_speech(content):
-                    logger.info("Ignoring noise-only speech")
+                # Ignore very short utterances (likely background noise)
+                if len(content) < 3:
+                    logger.info("Ignoring short speech")
                     return
                   
                 # Add to transcript tracker
                 conversation_tracker.add_user_message(content)
                 
-                # Queue processing as separate task
-                process_response(msg, content, assistant)
+                # Queue processing as separate task - maximum speed
+                asyncio.create_task(process_user_speech(msg, content, assistant))
 
         # Process user input in a non-blocking way - simplified
         def process_response(msg, content, assistant):
             # Skip the acknowledgment system completely for faster responses
             # Start processing the full response immediately
             asyncio.create_task(process_user_speech(msg, content, assistant))
-
-        # Process user speech with full response logic - optimized for speed
-        async def process_user_speech(msg, content, assistant, acknowledgment_task=None):
-            # Extract order details if present
-            conversation_tracker._extract_order_details(content)
-            
-            # Direct keyword matching for faster response
-            if "menu" in content or "cardápio" in content:
-                await adaptive_say(assistant, f"Aqui está o nosso menu principal: {MENU[:150]}...", context="menu_request")
-                return
-                
-            if "vinho" in content:
-                if "tinto" in content:
-                    await adaptive_say(assistant, "Nos vinhos tintos, temos o Monte Velho Tinto e o Eugénio de Almeida Tinto, ambos a 7.00€.")
-                elif "branco" in content:
-                    await adaptive_say(assistant, "Nos vinhos brancos, temos o Muralhas Monção e o Casal Garcia, ambos a 7.00€.")
-                elif "verde" in content:
-                    await adaptive_say(assistant, "Temos o Vinho da Casa Cruzeiro Lima, disponível em branco e tinto, a 4.00€.")
-                else:
-                    await adaptive_say(assistant, "Temos uma excelente carta de vinhos portugueses. Gostaria de conhecer os nossos tintos, brancos ou vinhos verdes?")
-                return
-            
-            if "sobremesa" in content or "doce" in content:
-                await adaptive_say(assistant, f"As nossas sobremesas são tradicionais portuguesas: {DESSERT_MENU}")
-                return
-            
-            if "confirmar" in content or "confirmo" in content:
-                order_summary = conversation_tracker.get_order_summary()
-                await adaptive_say(assistant, f"Perfeito! O seu pedido foi confirmado: {order_summary}", context="confirmation")
-                conversation_tracker.send_to_webhook()
-                return
-            
-            if ("completo" in content or "terminar" in content) and conversation_tracker.order_details["items"]:
-                order_summary = conversation_tracker.get_order_summary()
-                await adaptive_say(assistant, f"Resumindo o seu pedido: {order_summary}. Está tudo correto?", context="order_summary")
-                return
 
         # Track usage metrics
         usage_collector = metrics.UsageCollector()
@@ -931,6 +951,67 @@ async def entrypoint(ctx: JobContext):
         logger.error(f"Error in entrypoint: {e}")
         import traceback
         logger.error(traceback.format_exc())
+
+# Process user speech with full response logic - optimized for speed
+async def process_user_speech(msg, content, assistant, acknowledgment_task=None):
+    # Verificar itens do pedido
+    order_before = len(conversation_tracker.order_details["items"]) 
+    conversation_tracker._extract_order_details(content)
+    order_after = len(conversation_tracker.order_details["items"])
+    
+    # Verificar se o pedido inclui carnes que precisam de personalização
+    itens_carne = [item for item in conversation_tracker.order_details["items"] 
+                  if any(c in item["item"].lower() for c in ["frango", "espetada", "entrecosto", "févera", "costeleta", "coelho", "costelinha", "picanha", "bife"])]
+    
+    # Verificar apenas itens novos ou que não têm personalizações completas
+    for item in itens_carne:
+        personalizacoes = item.get("personalizacoes", {})
+        
+        # Se não tem molho definido, perguntar
+        if "molho" not in personalizacoes:
+            await adaptive_say(assistant, "Molho?", allow_interruptions=True)
+            return
+                    
+        # Se não tem picante definido, perguntar
+        if "picante" not in personalizacoes:
+            await adaptive_say(assistant, "Picante?", allow_interruptions=True)
+            return
+    
+    # Verificar comandos específicos
+    if "menu" in content or "cardápio" in content or "carta" in content:
+        await adaptive_say(assistant, MENU[:150])
+        return
+    
+    # Se tenta confirmar/finalizar, verifica se tem nome e horário
+    if "confirmar" in content or "confirmo" in content or "completo" in content or "terminar" in content:
+        # Verificar se há itens no pedido
+        if not conversation_tracker.order_details["items"]:
+            return  # Sem itens, nada a fazer
+            
+        # Verificar se o nome já foi fornecido
+        if not conversation_tracker.order_details["customer_name"]:
+            await adaptive_say(assistant, "Nome?")
+            return
+            
+        # Verificar se o horário já foi fornecido
+        if not conversation_tracker.order_details["pickup_time"]:
+            await adaptive_say(assistant, "Hora?")
+            return
+            
+        # Se confirmar explicitamente
+        if "confirmar" in content or "confirmo" in content:
+            await adaptive_say(assistant, "Registado.")
+            conversation_tracker.send_to_webhook()
+            return
+        
+        # Se completar/terminar
+        if ("completo" in content or "terminar" in content) and conversation_tracker.order_details["items"]:
+            order_summary = conversation_tracker.get_order_summary()
+            await adaptive_say(assistant, f"{order_summary}")
+            return
+    
+    # Não dar resposta para pedidos ou outros comandos não específicos
+    # O silêncio indica que o pedido foi registrado
 
 if __name__ == "__main__":
     # Run the application with CLI
